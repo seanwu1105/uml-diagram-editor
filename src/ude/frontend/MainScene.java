@@ -14,12 +14,13 @@ import ude.Utils;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MainScene extends Scene {
     private double orgSceneX, orgSceneY;
 
-    public HashMap<String, MenuItem> menuItems = new HashMap<>();
-    public LinkedHashMap<String, Button> taskButtons = new LinkedHashMap<>();
+    public Map<String, MenuItem> menuItems = new HashMap<>();
+    public Map<String, Button> taskButtons = new LinkedHashMap<>();
     public Pane diagram = new Pane();
 
     private BorderPane layout = (BorderPane) getRoot();
