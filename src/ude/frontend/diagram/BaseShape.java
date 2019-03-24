@@ -1,10 +1,12 @@
 package ude.frontend.diagram;
 
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import ude.backend.BasicObject;
+
 
 public abstract class BaseShape extends BasicObject {
     private final static double portLength = 10;
@@ -14,6 +16,8 @@ public abstract class BaseShape extends BasicObject {
 
     private Pane container;
     private boolean isSelected = false;
+    private Rectangle[] ports;
+    private double originalX, originalY;    // for the drag event, the original coordinates of the pressed mouse
 
     BaseShape(double x, double y, double width, double height) {
         super();
@@ -21,23 +25,32 @@ public abstract class BaseShape extends BasicObject {
         this.height = height;
         holder = new Rectangle(x, y, width, height);
         holder.setFill(Color.TRANSPARENT);
-        holder.setStroke(Color.GREEN);
     }
 
     public void paint(Pane container) {
-        shape.setOnMousePressed(e -> {
+        shape.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             select();
+            originalX = e.getX();
+            originalY = e.getY();
+        });
+        shape.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            double offsetX = e.getX() - originalX;
+            double offsetY = e.getY() - originalY;
+            holder.setX(holder.getX() + offsetX);
+            holder.setY(holder.getY() + offsetY);
+            originalX = e.getX();
+            originalY = e.getY();
         });
         this.container = container;
         this.container.getChildren().addAll(holder, shape);
     }
 
-    void select() {
+    private void select() {
         if (!isSelected) {
             isSelected = true;
             shape.toFront();
 
-            Rectangle[] ports = new Rectangle[4]; // top, right, bottom, left
+            ports = new Rectangle[4]; // top, right, bottom, left
             for (int i = 0; i < ports.length; i++) {
                 ports[i] = new Rectangle(portLength, portLength);
                 ports[i].toFront();
@@ -59,7 +72,11 @@ public abstract class BaseShape extends BasicObject {
         }
     }
 
-    void deselect() {
+    public void deselect() {
+        if (isSelected) {
+            isSelected = false;
 
+            container.getChildren().removeAll(ports);
+        }
     }
 }

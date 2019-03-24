@@ -2,6 +2,7 @@ package ude.frontend;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -11,9 +12,13 @@ import ude.frontend.diagram.BaseShape;
 import ude.frontend.diagram.ClassShape;
 import ude.frontend.diagram.UseCaseShape;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MainScene extends Scene {
     private Mode defaultMode = Mode.SELECT;
     private ToggleGroup toggleGroup = new ToggleGroup();
+    private Set<BaseShape> shapes = new HashSet<>();
 
     public MainScene() {
         super(new BorderPane());
@@ -66,43 +71,28 @@ public class MainScene extends Scene {
         clipper.widthProperty().bind(diagram.widthProperty());
         diagram.setClip(clipper);
 
-        diagram.setOnMousePressed(e -> {
+        diagram.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             Mode currentMode = getCurrentMode();
             if (currentMode == Mode.SELECT) {
-                System.out.println("try to select in select mode");
+                shapes.forEach(BaseShape::deselect);
             } else {
+                e.consume();
                 BaseShape shape;
                 if (currentMode == Mode.CLASS) {
                     shape = new ClassShape(e.getX(), e.getY());
                 } else {
                     shape = new UseCaseShape(e.getX(), e.getY());
                 }
+                shapes.add(shape);
                 shape.paint(diagram);
             }
         });
-
-        /* For testing */
-        /*Circle c = new Circle(100, 100, 50);
-        c.setOnMousePressed(t -> {
-            orgSceneX = t.getSceneX();
-            orgSceneY = t.getSceneY();
-
-            Circle current = (Circle) (t.getSource());
-            current.toFront();
+        diagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            Mode current = getCurrentMode();
+            if (current != Mode.SELECT) {
+                e.consume();
+            }
         });
-        c.setOnMouseDragged(t -> {
-            double offsetX = t.getSceneX() - orgSceneX;
-            double offsetY = t.getSceneY() - orgSceneY;
-
-            Circle current = (Circle) (t.getSource());
-
-            current.setCenterX(current.getCenterX() + offsetX);
-            current.setCenterY(current.getCenterY() + offsetY);
-
-            orgSceneX = t.getSceneX();
-            orgSceneY = t.getSceneY();
-        });
-        diagram.getChildren().add(c);*/
         return diagram;
     }
 
