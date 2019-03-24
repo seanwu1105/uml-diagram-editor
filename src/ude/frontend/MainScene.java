@@ -1,72 +1,63 @@
 package ude.frontend;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import ude.Utils;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import ude.frontend.diagram.BaseShape;
+import ude.frontend.diagram.ClassShape;
+import ude.frontend.diagram.UseCaseShape;
 
 public class MainScene extends Scene {
-    private double orgSceneX, orgSceneY;
-
-    public Map<String, MenuItem> menuItems = new HashMap<>();
-    public Map<String, Button> taskButtons = new LinkedHashMap<>();
-    public Pane diagram = new Pane();
-
-    private BorderPane layout = (BorderPane) getRoot();
-    private MenuBar menuBar = new MenuBar();
-    private VBox taskBar = new VBox();
+    private Mode defaultMode = Mode.SELECT;
+    private ToggleGroup toggleGroup = new ToggleGroup();
 
     public MainScene() {
         super(new BorderPane());
-        this.initLayout();
+
+        BorderPane layout = (BorderPane) getRoot();
+        layout.setTop(initMenuBar());
+        layout.setLeft(initTaskBar());
+        layout.setCenter(initDiagram());
     }
 
-    private void initLayout() {
-        initMenuBar();
-        initTaskBar();
-        initDiagram();
-
-        layout.setTop(menuBar);
-        layout.setLeft(taskBar);
-        layout.setCenter(diagram);
+    private Mode getCurrentMode() {
+        return Mode.valueOf(((ToggleButton) toggleGroup.getSelectedToggle()).getText());
     }
 
-    private void initMenuBar() {
-        String[] names = {"group", "ungroup", "change object name"};
-        for (String name : names) {
-            menuItems.put(name, new MenuItem(Utils.capitalize(name)));
-        }
+    private MenuBar initMenuBar() {
+        MenuBar bar = new MenuBar();
+        String[] editNames = {"group", "ungroup", "change object name"};
 
         Menu[] menus = new Menu[2];
         menus[0] = new Menu("File");
         menus[1] = new Menu("Edit");
-        menus[1].getItems().addAll(menuItems.get("group"), menuItems.get("ungroup"), menuItems.get("change object name"));
-        menuBar.getMenus().addAll(menus);
-    }
-
-    private void initTaskBar() {
-        String[] names = {"select", "associate", "generalize", "composite", "class", "useCase"};
-        for (String name : names) {
-            Button btn = new Button(name);
-            taskButtons.put(name, btn);
-            btn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        for (String name : editNames) {
+            menus[1].getItems().add(new MenuItem(Utils.capitalize(name)));
         }
-        taskBar.setStyle("-fx-background-color: #E5E5E5;");
-        taskBar.getChildren().addAll(taskButtons.values());
+        bar.getMenus().addAll(menus);
+        return bar;
     }
 
-    private void initDiagram() {
+    private Pane initTaskBar() {
+        Pane bar = new VBox();
+        for (Mode mode : Mode.values()) {
+            ToggleButton btn = new ToggleButton(mode.toString());
+            btn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            btn.setToggleGroup(toggleGroup);
+            btn.setSelected(mode.equals(defaultMode));
+            bar.getChildren().add(btn);
+        }
+        bar.setStyle("-fx-background-color: #E5E5E5;");
+
+        return bar;
+    }
+
+    private Pane initDiagram() {
+        Pane diagram = new Pane();
         diagram.setMinSize(500, 500);
         diagram.setStyle("-fx-background-color: #DDDDDD;");
 
@@ -75,8 +66,23 @@ public class MainScene extends Scene {
         clipper.widthProperty().bind(diagram.widthProperty());
         diagram.setClip(clipper);
 
+        diagram.setOnMousePressed(e -> {
+            Mode currentMode = getCurrentMode();
+            if (currentMode == Mode.SELECT) {
+                System.out.println("try to select in select mode");
+            } else {
+                BaseShape shape;
+                if (currentMode == Mode.CLASS) {
+                    shape = new ClassShape(e.getX(), e.getY());
+                } else {
+                    shape = new UseCaseShape(e.getX(), e.getY());
+                }
+                shape.paint(diagram);
+            }
+        });
+
         /* For testing */
-        Circle c = new Circle(100, 100, 50);
+        /*Circle c = new Circle(100, 100, 50);
         c.setOnMousePressed(t -> {
             orgSceneX = t.getSceneX();
             orgSceneY = t.getSceneY();
@@ -96,6 +102,9 @@ public class MainScene extends Scene {
             orgSceneX = t.getSceneX();
             orgSceneY = t.getSceneY();
         });
-        diagram.getChildren().add(c);
+        diagram.getChildren().add(c);*/
+        return diagram;
     }
+
+    enum Mode {SELECT, ASSOCIATE, GENERALIZE, COMPOSITE, CLASS, USE_CASE}
 }

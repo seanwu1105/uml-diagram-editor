@@ -7,6 +7,10 @@ import java.util.Set;
 public class CompositeObject extends UmlObject {
     private Set<UmlObject> children = new HashSet<>();
 
+    CompositeObject() {
+        super();
+    }
+
     public CompositeObject(UmlObject child) {
         add(child);
     }
