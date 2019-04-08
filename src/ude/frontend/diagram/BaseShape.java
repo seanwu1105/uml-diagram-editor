@@ -8,7 +8,7 @@ import javafx.scene.shape.Shape;
 import ude.backend.BasicObject;
 
 
-public abstract class BaseShape extends BasicObject {
+public abstract class BaseShape extends BasicObject implements Paintable {
     private final static double portLength = 10;
     Shape shape;
     Rectangle holder;
@@ -27,6 +27,7 @@ public abstract class BaseShape extends BasicObject {
         holder.setFill(Color.TRANSPARENT);
     }
 
+    @Override
     public void paint(Pane container) {
         shape.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             select();
@@ -55,16 +56,16 @@ public abstract class BaseShape extends BasicObject {
                 ports[i] = new Rectangle(portLength, portLength);
                 ports[i].toFront();
             }
-
+            // top port
             ports[0].xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
             ports[0].yProperty().bind(holder.yProperty().subtract(portLength));
-
+            // right port
             ports[1].xProperty().bind(holder.xProperty().add(width));
             ports[1].yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
-
+            // bottom port
             ports[2].xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
             ports[2].yProperty().bind(holder.yProperty().add(height));
-
+            // left port
             ports[3].xProperty().bind(holder.xProperty().subtract(portLength));
             ports[3].yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
 

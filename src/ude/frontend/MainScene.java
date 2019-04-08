@@ -8,10 +8,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import ude.Utils;
-import ude.frontend.diagram.BaseShape;
-import ude.frontend.diagram.ClassShape;
-import ude.frontend.diagram.UseCaseShape;
+import ude.frontend.diagram.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -62,6 +61,7 @@ public class MainScene extends Scene {
     }
 
     private Pane initDiagram() {
+        // TODO: this function should be factorized into smaller pieces
         Pane diagram = new Pane();
         diagram.setMinSize(500, 500);
         diagram.setStyle("-fx-background-color: #DDDDDD;");
@@ -71,30 +71,76 @@ public class MainScene extends Scene {
         clipper.widthProperty().bind(diagram.widthProperty());
         diagram.setClip(clipper);
 
+        initMouseEventListener(diagram);
+        return diagram;
+    }
+
+    private void initMouseEventListener(Pane diagram) {
         diagram.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             Mode currentMode = getCurrentMode();
             if (currentMode == Mode.SELECT) {
                 shapes.forEach(BaseShape::deselect);
             } else {
                 e.consume();
-                BaseShape shape;
-                if (currentMode == Mode.CLASS) {
-                    shape = new ClassShape(e.getX(), e.getY());
+                Paintable newItem;
+                if (Arrays.asList(Mode.ASSOCIATE, Mode.GENERALIZE, Mode.COMPOSITE).contains(currentMode)) {
+                    System.out.println(e.getTarget());
+                    // TODO: check which shape in shapes has e.getTarget() as .shape member
+                    newItem = currentMode.getNewPaintable(e.getX(), e.getY());
                 } else {
-                    shape = new UseCaseShape(e.getX(), e.getY());
+                    newItem = currentMode.getNewPaintable(e.getX(), e.getY());
+                    shapes.add((BaseShape) newItem);
                 }
-                shapes.add(shape);
-                shape.paint(diagram);
+                newItem.paint(diagram);
             }
         });
+
+        // TODO: separate MOUSE_DRAGGED into MOUSE_DRAG_EVENT for more detailed control
         diagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            Mode current = getCurrentMode();
-            if (current != Mode.SELECT) {
+            Mode currentMode = getCurrentMode();
+            if (currentMode == Mode.SELECT) {
+                // TODO: group selection
+            } else {
                 e.consume();
             }
         });
-        return diagram;
     }
 
-    enum Mode {SELECT, ASSOCIATE, GENERALIZE, COMPOSITE, CLASS, USE_CASE}
+    enum Mode implements paintableCreator {
+        SELECT {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                throw new NullPointerException("The current mode cannot create new paintable object.");
+            }
+        }, ASSOCIATE {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                return new AssociationLine(x, y);
+            }
+        }, GENERALIZE {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                return new GeneralizationLine(x, y);
+            }
+        }, COMPOSITE {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                return new CompositionLine(x, y);
+            }
+        }, CLASS {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                return new ClassShape(x, y);
+            }
+        }, USE_CASE {
+            @Override
+            public Paintable getNewPaintable(double x, double y) {
+                return new UseCaseShape(x, y);
+            }
+        }
+    }
+
+    private interface paintableCreator {
+        Paintable getNewPaintable(double x, double y);
+    }
 }
