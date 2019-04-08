@@ -2,6 +2,7 @@ package ude.frontend;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -49,14 +50,16 @@ public class MainScene extends Scene {
     private Pane initTaskBar() {
         Pane bar = new VBox();
         for (Mode mode : Mode.values()) {
-            ToggleButton btn = new ToggleButton(mode.toString());
+            RadioButton btn = new RadioButton(mode.toString());
+            btn.getStyleClass().remove("radio-button");
+            btn.getStyleClass().add("toggle-button");
             btn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             btn.setToggleGroup(toggleGroup);
             btn.setSelected(mode.equals(defaultMode));
             bar.getChildren().add(btn);
         }
+        toggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> shapes.forEach(BaseShape::deselect));
         bar.setStyle("-fx-background-color: #E5E5E5;");
-
         return bar;
     }
 
@@ -84,7 +87,7 @@ public class MainScene extends Scene {
                 e.consume();
                 Paintable newItem;
                 if (Arrays.asList(Mode.ASSOCIATE, Mode.GENERALIZE, Mode.COMPOSITE).contains(currentMode)) {
-                    System.out.println(e.getTarget());
+                    System.out.println("PRESSED");
                     // TODO: check which shape in shapes has e.getTarget() as .shape member
                     newItem = currentMode.getNewPaintable(e.getX(), e.getY());
                 } else {
@@ -95,13 +98,27 @@ public class MainScene extends Scene {
             }
         });
 
-        // TODO: separate MOUSE_DRAGGED into MOUSE_DRAG_EVENT for more detailed control
+        diagram.addEventFilter(MouseEvent.DRAG_DETECTED, e -> {
+            diagram.startFullDrag();
+        });
+
         diagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
             Mode currentMode = getCurrentMode();
             if (currentMode == Mode.SELECT) {
                 // TODO: group selection
             } else {
                 e.consume();
+            }
+        });
+
+        diagram.addEventHandler(MouseDragEvent.MOUSE_DRAG_ENTERED_TARGET, e -> {
+            System.out.println(e.getTarget());
+            Mode currentMode = getCurrentMode();
+            if (currentMode == Mode.SELECT) {
+                // TODO: ???
+            } else {
+                e.consume();
+                Paintable newLine;
             }
         });
     }
