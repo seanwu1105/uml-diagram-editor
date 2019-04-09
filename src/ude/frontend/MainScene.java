@@ -1,5 +1,7 @@
 package ude.frontend;
 
+import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseDragEvent;
@@ -7,18 +9,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import ude.Utils;
 import ude.frontend.diagram.*;
 
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class MainScene extends Scene {
     private Mode defaultMode = Mode.SELECT;
     private ToggleGroup toggleGroup = new ToggleGroup();
-    private Set<BaseShape> shapes = new HashSet<>();
+    private Set<UmlBaseShape> shapes = new HashSet<>();
+    private Set<AssociationLine> lines = new HashSet<>();
+    private Paintable newUmlItem;
 
     public MainScene() {
         super(new BorderPane());
@@ -58,7 +65,7 @@ public class MainScene extends Scene {
             btn.setSelected(mode.equals(defaultMode));
             bar.getChildren().add(btn);
         }
-        toggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> shapes.forEach(BaseShape::deselect));
+        toggleGroup.selectedToggleProperty().addListener((ov, old_toggle, new_toggle) -> deselectAll());
         bar.setStyle("-fx-background-color: #E5E5E5;");
         return bar;
     }
@@ -79,22 +86,32 @@ public class MainScene extends Scene {
     }
 
     private void initMouseEventListener(Pane diagram) {
+        // TODO: factorize this function into adding different event listeners for different study cases
+
         diagram.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             Mode currentMode = getCurrentMode();
             if (currentMode == Mode.SELECT) {
-                shapes.forEach(BaseShape::deselect);
+                deselectAll();
             } else {
                 e.consume();
-                Paintable newItem;
-                if (Arrays.asList(Mode.ASSOCIATE, Mode.GENERALIZE, Mode.COMPOSITE).contains(currentMode)) {
-                    System.out.println("PRESSED");
-                    // TODO: check which shape in shapes has e.getTarget() as .shape member
-                    newItem = currentMode.getNewPaintable(e.getX(), e.getY());
+                newUmlItem = currentMode.getNewPaintable(e.getX(), e.getY());
+                if (newUmlItem instanceof AssociationLine) {
+                    UmlBaseShape lineSource;
+                    try {
+                        lineSource = getUmlShape((Shape) e.getTarget());
+                    } catch (ClassCastException | NoSuchElementException exception) {
+                        return;
+                    }
+                    // else
+                    List<ObservableValue<Number>> sourcePortPosition = lineSource.getClosestPortPositionProperty(e.getX(), e.getY());
+                    ((AssociationLine) newUmlItem).startXProperty().bind(sourcePortPosition.get(0));
+                    ((AssociationLine) newUmlItem).startYProperty().bind(sourcePortPosition.get(1));
+                    lines.add((AssociationLine) newUmlItem);
+                    newUmlItem.paint(diagram);
                 } else {
-                    newItem = currentMode.getNewPaintable(e.getX(), e.getY());
-                    shapes.add((BaseShape) newItem);
+                    shapes.add((UmlBaseShape) newUmlItem);
+                    newUmlItem.paint(diagram);
                 }
-                newItem.paint(diagram);
             }
         });
 
@@ -103,24 +120,43 @@ public class MainScene extends Scene {
         });
 
         diagram.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            Mode currentMode = getCurrentMode();
-            if (currentMode == Mode.SELECT) {
+            if (getCurrentMode() == Mode.SELECT) {
                 // TODO: group selection
-            } else {
+            } else
                 e.consume();
-            }
         });
 
-        diagram.addEventHandler(MouseDragEvent.MOUSE_DRAG_ENTERED_TARGET, e -> {
-            System.out.println(e.getTarget());
-            Mode currentMode = getCurrentMode();
-            if (currentMode == Mode.SELECT) {
-                // TODO: ???
-            } else {
-                e.consume();
-                Paintable newLine;
+        diagram.addEventHandler(MouseEvent.MOUSE_DRAGGED, e -> {
+            if (getCurrentMode() == Mode.SELECT)
+                lines.forEach(AssociationLine::toFront);
+        });
+
+        diagram.addEventHandler(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (getCurrentMode() != Mode.SELECT && newUmlItem instanceof AssociationLine) {
+                UmlBaseShape lineTarget;
+                try {
+                    lineTarget = getUmlShape((Shape) e.getTarget());
+                } catch (ClassCastException | NoSuchElementException exception) {
+                    return;
+                }
+                // else
+                List<ObservableValue<Number>> sourcePortPosition = lineTarget.getClosestPortPositionProperty(e.getX(), e.getY());
+                ((AssociationLine) newUmlItem).endXProperty().bind(sourcePortPosition.get(0));
+                ((AssociationLine) newUmlItem).endYProperty().bind(sourcePortPosition.get(1));
             }
         });
+    }
+
+    private UmlBaseShape getUmlShape(Shape shape) {
+        for (UmlBaseShape umlShape : shapes)
+            if (umlShape.shape == shape)
+                return umlShape;
+        throw new NoSuchElementException("Cannot find the UmlShape in shapes set.");
+    }
+
+    private void deselectAll() {
+        shapes.forEach(UmlBaseShape::deselect);
+        lines.forEach(AssociationLine::toFront);
     }
 
     enum Mode implements paintableCreator {

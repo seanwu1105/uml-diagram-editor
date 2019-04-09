@@ -3,7 +3,7 @@ package ude.frontend.diagram;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class ClassShape extends BaseShape {
+public class ClassShape extends UmlBaseShape {
     public ClassShape(double x, double y) {
         super(x, y, 100, 150);
         shape = new Rectangle(width, height);
