@@ -1,4 +1,4 @@
-package ude.frontend.diagram;
+package ude.frontend.diagram.line;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;

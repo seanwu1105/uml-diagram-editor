@@ -1,26 +1,24 @@
 package ude.backend;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CompositeObject extends UmlObject {
-    private Set<UmlObject> children = new HashSet<>();
+    protected Set<UmlObject> children = new HashSet<>();
 
-    CompositeObject() {
-        super();
+    public CompositeObject() {
     }
 
-    public CompositeObject(UmlObject child) {
-        add(child);
-    }
-
-    public CompositeObject(Collection<UmlObject> children) {
-        add(children);
-    }
-
-    public Set<UmlObject> getChildren() {
-        return children;
+    /**
+     * Get the group root which the umlObject belongs to.
+     *
+     * @param umlObject the target object to search for group root
+     * @return the root object in group or umlObject itself if there is no parent
+     */
+    public static UmlObject getRoot(UmlObject umlObject) {
+        while (umlObject.parent != null)
+            umlObject = umlObject.parent;
+        return umlObject;
     }
 
     public void add(UmlObject child) {
@@ -28,12 +26,7 @@ public class CompositeObject extends UmlObject {
         child.parent = this;
     }
 
-    public void add(Collection<UmlObject> children) {
-        this.children.addAll(children);
-        children.forEach(child -> child.parent = this);
-    }
-
-    public void ungroup() {
+    void ungroup() {
         for (UmlObject child : children) {
             child.parent = null;
         }

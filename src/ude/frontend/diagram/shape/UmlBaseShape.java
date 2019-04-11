@@ -1,4 +1,4 @@
-package ude.frontend.diagram;
+package ude.frontend.diagram.shape;
 
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
@@ -7,26 +7,27 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import ude.backend.BasicObject;
+import ude.frontend.diagram.Paintable;
+import ude.frontend.diagram.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
-public abstract class UmlBaseShape extends BasicObject implements Paintable {
+public abstract class UmlBaseShape extends BasicObject implements Paintable, Selectable {
     private final static double portLength = 10;
-    public Shape shape;
-    Rectangle holder;
-    double width, height;
-
-    private Pane container;
-    private boolean isSelected = false;
-    private Map<Side, Rectangle> ports = Map.of(
+    private final Map<Side, Rectangle> ports = Map.of(
             Side.TOP, new Rectangle(portLength, portLength),
             Side.RIGHT, new Rectangle(portLength, portLength),
             Side.BOTTOM, new Rectangle(portLength, portLength),
             Side.LEFT, new Rectangle(portLength, portLength)
     );
+    public Shape shape;
+    private boolean isSelected = false;
+    Rectangle holder;
+    double width, height;
+    private Pane container;
     private double originalX, originalY;    // for the drag event, the original coordinates of the pressed mouse
 
     UmlBaseShape(double x, double y, double width, double height) {
@@ -56,37 +57,41 @@ public abstract class UmlBaseShape extends BasicObject implements Paintable {
         this.container.getChildren().addAll(holder, shape);
     }
 
-    private void select() {
+    @Override
+    public void select() {
         if (!isSelected) {
             isSelected = true;
-            shape.toFront();
+            showPorts();
 
-            for (Rectangle port : ports.values()) {
-                port.toFront();
-            }
-            // top port
-            ports.get(Side.TOP).xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
-            ports.get(Side.TOP).yProperty().bind(holder.yProperty().subtract(portLength));
-            // right port
-            ports.get(Side.RIGHT).xProperty().bind(holder.xProperty().add(width));
-            ports.get(Side.RIGHT).yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
-            // bottom port
-            ports.get(Side.BOTTOM).xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
-            ports.get(Side.BOTTOM).yProperty().bind(holder.yProperty().add(height));
-            // left port
-            ports.get(Side.LEFT).xProperty().bind(holder.xProperty().subtract(portLength));
-            ports.get(Side.LEFT).yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
-
-            container.getChildren().addAll(ports.values());
+            if (parent instanceof Selectable)
+                ((Selectable) parent).select();
         }
     }
 
+    @Override
     public void deselect() {
         if (isSelected) {
             isSelected = false;
+            hidePorts();
 
-            container.getChildren().removeAll(ports.values());
+            if (parent instanceof Selectable) {
+                ((Selectable) parent).deselect();
+            }
         }
+    }
+
+    @Override
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public boolean isInside(double x1, double y1, double x2, double y2) {
+        double[] topLeft = {Math.min(x1, x2), Math.min(y1, y2)};
+        double[] bottomRight = {Math.max(x1, x2), Math.max(y1, y2)};
+        return (holder.getX() >= topLeft[0]
+                && holder.getY() >= topLeft[1]
+                && holder.getX() + holder.getWidth() <= bottomRight[0]
+                && holder.getY() + holder.getHeight() <= bottomRight[1]);
     }
 
     public List<ObservableValue<Number>> getClosestPortPositionProperty(double x, double y) {
@@ -122,6 +127,32 @@ public abstract class UmlBaseShape extends BasicObject implements Paintable {
             pair.add(holder.yProperty().add(0.5 * holder.getHeight()));
         }
         return pair;
+    }
+
+    private void showPorts() {
+        shape.toFront();
+
+        for (Rectangle port : ports.values()) {
+            port.toFront();
+        }
+        // top port
+        ports.get(Side.TOP).xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
+        ports.get(Side.TOP).yProperty().bind(holder.yProperty().subtract(portLength));
+        // right port
+        ports.get(Side.RIGHT).xProperty().bind(holder.xProperty().add(width));
+        ports.get(Side.RIGHT).yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
+        // bottom port
+        ports.get(Side.BOTTOM).xProperty().bind(holder.xProperty().add(0.5 * (width - portLength)));
+        ports.get(Side.BOTTOM).yProperty().bind(holder.yProperty().add(height));
+        // left port
+        ports.get(Side.LEFT).xProperty().bind(holder.xProperty().subtract(portLength));
+        ports.get(Side.LEFT).yProperty().bind(holder.yProperty().add(0.5 * (height - portLength)));
+
+        container.getChildren().addAll(ports.values());
+    }
+
+    private void hidePorts() {
+        container.getChildren().removeAll(ports.values());
     }
 
     enum Side {TOP, RIGHT, BOTTOM, LEFT}

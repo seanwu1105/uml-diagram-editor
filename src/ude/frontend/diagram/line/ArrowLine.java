@@ -1,4 +1,4 @@
-package ude.frontend.diagram;
+package ude.frontend.diagram.line;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;

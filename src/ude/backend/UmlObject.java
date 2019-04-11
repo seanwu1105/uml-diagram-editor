@@ -1,7 +1,7 @@
 package ude.backend;
 
 public class UmlObject {
-    CompositeObject parent = null;
+    protected CompositeObject parent = null;
 
     UmlObject() {
     }

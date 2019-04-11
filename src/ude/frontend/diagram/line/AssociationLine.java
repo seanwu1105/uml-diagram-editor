@@ -1,7 +1,8 @@
-package ude.frontend.diagram;
+package ude.frontend.diagram.line;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import ude.frontend.diagram.Paintable;
 
 public class AssociationLine extends Line implements Paintable {
 
