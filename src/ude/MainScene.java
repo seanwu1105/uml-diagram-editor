@@ -11,7 +11,8 @@ import ude.diagram.Diagram;
 import ude.diagram.connection.AssociationConnection;
 import ude.diagram.connection.CompositionConnection;
 import ude.diagram.connection.GeneralizationConnection;
-import ude.diagram.object.*;
+import ude.diagram.object.UmlClassObject;
+import ude.diagram.object.UmlUseCaseObject;
 
 public class MainScene extends Scene {
     private final Mode defaultMode = Mode.SELECT;
@@ -56,6 +57,13 @@ public class MainScene extends Scene {
 
         editMenuItems[0].setOnAction(e -> diagram.groupSelectedBasicObjects());
         editMenuItems[1].setOnAction(e -> diagram.ungroupSelectedCompositeObject());
+        editMenuItems[2].setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog(diagram.getSelectedBasicObjectName());
+            dialog.initOwner(getWindow());
+            dialog.setTitle("Object Name");
+            dialog.setHeaderText("Object Name");
+            dialog.showAndWait().ifPresent(diagram::setSelectedBasicObjectName);
+        });
 
         return bar;
     }

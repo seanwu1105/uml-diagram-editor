@@ -3,10 +3,10 @@ package ude.diagram;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class SelectingArea extends Rectangle {
-    public double initX, initY;
+class SelectingArea extends Rectangle {
+    double initX, initY;
 
-    public SelectingArea(double initX, double initY) {
+    SelectingArea(double initX, double initY) {
         super(initX, initY, 0, 0);
         setFill(Color.TRANSPARENT);
         setStroke(Color.STEELBLUE);
@@ -14,7 +14,7 @@ public class SelectingArea extends Rectangle {
         this.initY = initY;
     }
 
-    public void setCursorX(double x) {
+    void setCursorX(double x) {
         double xOffset = x - initX;
         if (xOffset >= 0)
             setWidth(xOffset);
@@ -24,7 +24,7 @@ public class SelectingArea extends Rectangle {
         }
     }
 
-    public void setCursorY(double y) {
+    void setCursorY(double y) {
         double yOffset = y - initY;
         if (yOffset >= 0)
             setHeight(yOffset);

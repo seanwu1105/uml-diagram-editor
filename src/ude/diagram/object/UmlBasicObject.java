@@ -3,11 +3,14 @@ package ude.diagram.object;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +18,16 @@ import java.util.Map;
 
 
 public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject {
-    private final static double portLength = 10;
+    private final static double PORT_LENGTH = 10;
     private final Map<Side, Rectangle> ports = Map.of(
-            Side.TOP, new Rectangle(portLength, portLength),
-            Side.RIGHT, new Rectangle(portLength, portLength),
-            Side.BOTTOM, new Rectangle(portLength, portLength),
-            Side.LEFT, new Rectangle(portLength, portLength)
+            Side.TOP, new Rectangle(PORT_LENGTH, PORT_LENGTH),
+            Side.RIGHT, new Rectangle(PORT_LENGTH, PORT_LENGTH),
+            Side.BOTTOM, new Rectangle(PORT_LENGTH, PORT_LENGTH),
+            Side.LEFT, new Rectangle(PORT_LENGTH, PORT_LENGTH)
     );
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
     public Shape shape;
+    public Text name = new Text();
     private UmlCompositeObject group = null;
     private double originalX, originalY;    // for the drag event, the original coordinates of the pressed mouse
 
@@ -32,26 +36,17 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         setFill(Color.TRANSPARENT);
 
         this.shape = shape;
-        shape.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            select();
-            originalX = e.getX();
-            originalY = e.getY();
-        });
-        shape.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            double offsetX = e.getX() - originalX;
-            double offsetY = e.getY() - originalY;
-            setX(getX() + offsetX);
-            setY(getY() + offsetY);
-            originalX = e.getX();
-            originalY = e.getY();
-        });
+        setShapeEventListeners();
+
         bindShapeToHolder();
+
+        initName();
 
         parentProperty().addListener((observableValue, oldParent, newParent) -> {
             if (newParent != null)
-                ((Pane) getParent()).getChildren().addAll(shape);
+                ((Pane) getParent()).getChildren().addAll(shape, name);
             else
-                ((Pane) oldParent).getChildren().removeAll(shape);
+                ((Pane) oldParent).getChildren().removeAll(shape, name);
         });
     }
 
@@ -60,6 +55,8 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     public void select() {
         if (!isSelected.get()) {
             isSelected.set(true);
+            shape.toFront();
+            name.toFront();
             showPorts();
 
             if (group != null)
@@ -137,24 +134,44 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         return pair;
     }
 
-    private void showPorts() {
-        shape.toFront();
+    private void setShapeEventListeners() {
+        shape.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            select();
+            originalX = e.getX();
+            originalY = e.getY();
+        });
+        shape.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            double offsetX = e.getX() - originalX;
+            double offsetY = e.getY() - originalY;
+            setX(getX() + offsetX);
+            setY(getY() + offsetY);
+            originalX = e.getX();
+            originalY = e.getY();
+        });
+    }
 
-        for (Rectangle port : ports.values()) {
-            port.toFront();
-        }
+    private void initName() {
+        double nameLeftMargin = 10, nameTopMargin = 20;
+        name.setTextAlignment(TextAlignment.CENTER);
+
+        name.xProperty().bind(xProperty().add(nameLeftMargin));
+        name.yProperty().bind(yProperty().add(nameTopMargin));
+    }
+
+    private void showPorts() {
+        ports.values().forEach(Node::toFront);
         // top port
-        ports.get(Side.TOP).xProperty().bind(xProperty().add(0.5 * (getWidth() - portLength)));
-        ports.get(Side.TOP).yProperty().bind(yProperty().subtract(portLength));
+        ports.get(Side.TOP).xProperty().bind(xProperty().add(0.5 * (getWidth() - PORT_LENGTH)));
+        ports.get(Side.TOP).yProperty().bind(yProperty().subtract(PORT_LENGTH));
         // right port
         ports.get(Side.RIGHT).xProperty().bind(xProperty().add(getWidth()));
-        ports.get(Side.RIGHT).yProperty().bind(yProperty().add(0.5 * (getHeight() - portLength)));
+        ports.get(Side.RIGHT).yProperty().bind(yProperty().add(0.5 * (getHeight() - PORT_LENGTH)));
         // bottom port
-        ports.get(Side.BOTTOM).xProperty().bind(xProperty().add(0.5 * (getWidth() - portLength)));
+        ports.get(Side.BOTTOM).xProperty().bind(xProperty().add(0.5 * (getWidth() - PORT_LENGTH)));
         ports.get(Side.BOTTOM).yProperty().bind(yProperty().add(getHeight()));
         // left port
-        ports.get(Side.LEFT).xProperty().bind(xProperty().subtract(portLength));
-        ports.get(Side.LEFT).yProperty().bind(yProperty().add(0.5 * (getHeight() - portLength)));
+        ports.get(Side.LEFT).xProperty().bind(xProperty().subtract(PORT_LENGTH));
+        ports.get(Side.LEFT).yProperty().bind(yProperty().add(0.5 * (getHeight() - PORT_LENGTH)));
 
         ((Pane) getParent()).getChildren().addAll(ports.values());
     }

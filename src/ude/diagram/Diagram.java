@@ -134,7 +134,7 @@ public class Diagram extends Pane {
         connections.forEach(AssociationConnection::toFront);
     }
 
-    public void groupSelectedBasicObjects() {
+        public void groupSelectedBasicObjects() {
         UmlCompositeObject umlCompositeObject = new UmlCompositeObject();
         umlCompositeObject.compose(selectedGroupRoots);
         updateSelectedGroupRoots();
@@ -146,6 +146,20 @@ public class Diagram extends Pane {
         else
             ((UmlCompositeObject) selectedGroupRoots.iterator().next()).decompose();
         updateSelectedGroupRoots();
+    }
+
+    public String getSelectedBasicObjectName() {
+        if (selectedBasicObjects.size() != 1)
+            throw new RuntimeException("Getting object's name could only be applied when exactly one basic object is selected.");
+        else
+            return selectedBasicObjects.iterator().next().name.getText();
+    }
+
+    public void setSelectedBasicObjectName(String newName) {
+        if (selectedBasicObjects.size() != 1)
+            throw new RuntimeException("Naming object could only be applied when exactly one basic object is selected.");
+        else
+            selectedBasicObjects.iterator().next().name.setText(newName);
     }
 
     private UmlBasicObject getUmlBasicObject(Shape shape) throws NoSuchElementException {
