@@ -1,4 +1,4 @@
-package ude.frontend.diagram;
+package ude.diagram;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

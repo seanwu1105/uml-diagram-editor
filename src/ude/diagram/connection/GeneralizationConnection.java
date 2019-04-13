@@ -1,11 +1,11 @@
-package ude.frontend.diagram.line;
+package ude.diagram.connection;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class GeneralizationLine extends ArrowLine {
-    public GeneralizationLine(double x, double y) {
+public class GeneralizationConnection extends ArrowConnection {
+    public GeneralizationConnection(double x, double y) {
         super(x, y);
         double arrowHeadLength = 10 / Math.sqrt(2);
         arrowHead = new Polygon(

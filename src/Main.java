@@ -1,6 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ude.frontend.MainScene;
+import ude.MainScene;
 
 public class Main extends Application {
 

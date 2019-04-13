@@ -1,11 +1,11 @@
-package ude.frontend.diagram.line;
+package ude.diagram.connection;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class CompositionLine extends ArrowLine {
-    public CompositionLine(double x, double y) {
+public class CompositionConnection extends ArrowConnection {
+    public CompositionConnection(double x, double y) {
         super(x, y);
         double arrowHeadLength = 10;
         arrowHead = new Rectangle(arrowHeadLength, arrowHeadLength);
