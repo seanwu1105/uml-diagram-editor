@@ -12,9 +12,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject {
@@ -26,6 +24,7 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
             Side.LEFT, new Rectangle(PORT_LENGTH, PORT_LENGTH)
     );
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
+    Set<Shape> decorations = new HashSet<>();
     public Shape shape;
     public Text name = new Text();
     private UmlCompositeObject group = null;
@@ -44,10 +43,15 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         initName();
 
         parentProperty().addListener((observableValue, oldParent, newParent) -> {
-            if (newParent != null)
-                ((Pane) getParent()).getChildren().addAll(shape, name);
-            else
-                ((Pane) oldParent).getChildren().removeAll(shape, name);
+            System.out.println(decorations);
+            if (newParent != null) {
+                ((Pane) getParent()).getChildren().add(shape);
+                ((Pane) getParent()).getChildren().addAll(decorations);
+            }
+            else {
+                ((Pane) getParent()).getChildren().remove(shape);
+                ((Pane) oldParent).getChildren().removeAll(decorations);
+            }
         });
     }
 
@@ -57,7 +61,7 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         if (!isSelected.get()) {
             isSelected.set(true);
             shape.toFront();
-            name.toFront();
+            decorations.forEach(Node::toFront);
             showPorts();
             if (group != null)
                 group.select();
@@ -168,12 +172,10 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     }
 
     private void initName() {
-        // TODO: set name position
-        double nameLeftMargin = 10, nameTopMargin = 20;
         name.setTextAlignment(TextAlignment.CENTER);
-
-        name.xProperty().bind(xProperty().add(nameLeftMargin));
-        name.yProperty().bind(yProperty().add(nameTopMargin));
+        name.xProperty().bind(xProperty());
+        name.yProperty().bind(yProperty().subtract(15));
+        decorations.add(name);
     }
 
     private void showPorts() {

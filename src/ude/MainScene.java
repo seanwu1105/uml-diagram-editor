@@ -59,6 +59,7 @@ public class MainScene extends Scene {
         editMenuItems[1].setOnAction(e -> diagram.ungroupSelectedCompositeObject());
         editMenuItems[2].setOnAction(e -> {
             TextInputDialog dialog = new TextInputDialog(diagram.getSelectedBasicObjectName());
+            dialog.setResizable(true);  // fix the weird bug: the first time pop-up, the dialog size is NaN.
             dialog.initOwner(getWindow());
             dialog.setTitle("Object Name");
             dialog.setHeaderText("Object Name");
