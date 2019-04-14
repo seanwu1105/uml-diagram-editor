@@ -95,8 +95,8 @@ public class MainScene extends Scene {
     public enum Mode implements shapeFactory {
         SELECT {
             @Override
-            public Shape getNewShape(double x, double y) throws NullPointerException {
-                throw new NullPointerException("The current mode cannot create new paintable object.");
+            public Shape getNewShape(double x, double y) {
+                return null;
             }
         }, ASSOCIATE {
             @Override
