@@ -11,6 +11,7 @@ public class UmlCompositeObject implements UmlBaseObject {
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
     private UmlCompositeObject group = null;
     private Set<UmlBaseObject> umlBaseObjects;
+    // for the drag event, the original coordinates of when pressed the mouse
 
     static public UmlBaseObject getRoot(UmlBaseObject umlBaseObject) {
         while (umlBaseObject.getGroup() != null)
@@ -22,8 +23,7 @@ public class UmlCompositeObject implements UmlBaseObject {
     public void select() {
         if (!isSelected.get()) {
             isSelected.set(true);
-            for (UmlBaseObject umlBaseShape : umlBaseObjects)
-                umlBaseShape.select();
+            umlBaseObjects.forEach(UmlBaseObject::select);
             if (group != null)
                 group.select();
         }
@@ -33,9 +33,7 @@ public class UmlCompositeObject implements UmlBaseObject {
     public void deselect() {
         if (isSelected.get()) {
             isSelected.set(false);
-            for (UmlBaseObject umlBaseShape : umlBaseObjects)
-                umlBaseShape.deselect();
-
+            umlBaseObjects.forEach(UmlBaseObject::deselect);
             if (group != null)
                 group.deselect();
         }
@@ -44,6 +42,14 @@ public class UmlCompositeObject implements UmlBaseObject {
     @Override
     public BooleanProperty selectedProperty() {
         return isSelected;
+    }
+
+    @Override
+    public void setDraggingOriginal(double draggingOriginalX, double draggingOriginalY, UmlBaseObject caller) {
+        if (group != null && group != caller)
+            group.setDraggingOriginal(draggingOriginalX, draggingOriginalY, this);
+        else
+            umlBaseObjects.forEach(object -> object.setDraggingOriginal(draggingOriginalX, draggingOriginalY, this));
     }
 
     @Override
@@ -64,5 +70,12 @@ public class UmlCompositeObject implements UmlBaseObject {
     public void decompose() {
         umlBaseObjects.forEach(umlBaseObject -> umlBaseObject.setGroup(null));
         umlBaseObjects.clear();
+    }
+
+    public void move(double offsetX, double offsetY, UmlBaseObject caller) {
+        if (group != null && group != caller)
+            group.move(offsetX, offsetY, this);
+        else
+            umlBaseObjects.forEach(umlBaseObject -> umlBaseObject.move(offsetX, offsetY, this));
     }
 }

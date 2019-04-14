@@ -29,14 +29,15 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     public Shape shape;
     public Text name = new Text();
     private UmlCompositeObject group = null;
-    private double originalX, originalY;    // for the drag event, the original coordinates of the pressed mouse
+    // for the drag event, the original coordinates of when pressed the mouse
+    private double draggingOriginalX, draggingOriginalY;
 
     UmlBasicObject(Shape shape, double x, double y, double width, double height) {
         super(x, y, width, height);
         setFill(Color.TRANSPARENT);
 
         this.shape = shape;
-        setShapeEventListeners();
+        initShapeEventListeners();
 
         bindShapeToHolder();
 
@@ -58,7 +59,6 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
             shape.toFront();
             name.toFront();
             showPorts();
-
             if (group != null)
                 group.select();
         }
@@ -69,7 +69,6 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         if (isSelected.get()) {
             isSelected.set(false);
             hidePorts();
-
             if (group != null)
                 group.deselect();
         }
@@ -81,6 +80,17 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     }
 
     @Override
+    public void setDraggingOriginal(double draggingOriginalX, double draggingOriginalY, UmlBaseObject caller) {
+        if (group != null && group != caller)
+            group.setDraggingOriginal(draggingOriginalX, draggingOriginalY, this);
+        else {
+            this.draggingOriginalX = draggingOriginalX;
+            this.draggingOriginalY = draggingOriginalY;
+        }
+    }
+
+
+    @Override
     public UmlCompositeObject getGroup() {
         return group;
     }
@@ -88,6 +98,16 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     @Override
     public void setGroup(UmlCompositeObject group) {
         this.group = group;
+    }
+
+    @Override
+    public void move(double offsetX, double offsetY, UmlBaseObject caller) {
+        if (group != null && group != caller)
+            group.move(offsetX, offsetY, this);
+        else {
+            setX(getX() + offsetX);
+            setY(getY() + offsetY);
+        }
     }
 
     public boolean isInside(double x1, double y1, double x2, double y2) {
@@ -134,24 +154,21 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         return pair;
     }
 
-    private void setShapeEventListeners() {
+    private void initShapeEventListeners() {
         shape.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             select();
-            originalX = e.getX();
-            originalY = e.getY();
+            setDraggingOriginal(e.getX(), e.getY(), this);
         });
         shape.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
-            // TODO: MOVE WHOLE GROUP!
-            double offsetX = e.getX() - originalX;
-            double offsetY = e.getY() - originalY;
-            setX(getX() + offsetX);
-            setY(getY() + offsetY);
-            originalX = e.getX();
-            originalY = e.getY();
+            double offsetX = e.getX() - draggingOriginalX;
+            double offsetY = e.getY() - draggingOriginalY;
+            move(offsetX, offsetY, this);
+            setDraggingOriginal(e.getX(), e.getY(), this);
         });
     }
 
     private void initName() {
+        // TODO: set name position
         double nameLeftMargin = 10, nameTopMargin = 20;
         name.setTextAlignment(TextAlignment.CENTER);
 

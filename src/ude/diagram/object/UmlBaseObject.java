@@ -9,7 +9,13 @@ public interface UmlBaseObject {
 
     BooleanProperty selectedProperty();
 
+    // the caller prevents infinite recursion as the parent will also call child.setDraggingOriginal()
+    void setDraggingOriginal(double x, double y, UmlBaseObject caller);
+
     UmlCompositeObject getGroup();
 
     void setGroup(UmlCompositeObject group);
+
+    // the caller prevents infinite recursion as the parent will also call child.setDraggingOriginal()
+    void move(double offsetX, double offsetY, UmlBaseObject caller);
 }
