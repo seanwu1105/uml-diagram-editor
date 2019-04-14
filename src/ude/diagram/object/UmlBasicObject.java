@@ -141,6 +141,7 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
             originalY = e.getY();
         });
         shape.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            // TODO: MOVE WHOLE GROUP!
             double offsetX = e.getX() - originalX;
             double offsetY = e.getY() - originalY;
             setX(getX() + offsetX);

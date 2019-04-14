@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 public class UmlClassObject extends UmlBasicObject {
     private final static double WIDTH = 100, HEIGHT = 150;
 
+    // TODO: add a decorating line
     public UmlClassObject(double x, double y) {
         super(new Rectangle(), x, y, WIDTH, HEIGHT);
         shape.setFill(Color.ANTIQUEWHITE);
