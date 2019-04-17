@@ -3,6 +3,7 @@ package ude;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -72,9 +73,11 @@ public class MainScene extends Scene {
     private Pane initTaskBar() {
         Pane bar = new VBox();
         for (Mode mode : Mode.values()) {
-            RadioButton btn = new RadioButton(mode.toString());
+            RadioButton btn = new RadioButton();
+            btn.setId(mode.toString());
             btn.getStyleClass().remove("radio-button");
             btn.getStyleClass().add("toggle-button");
+            btn.setGraphic(new ImageView(String.format("file:assets/%s.png", mode.toString())));
             btn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             btn.setToggleGroup(toggleGroup);
             btn.setSelected(mode.equals(defaultMode));
@@ -87,7 +90,7 @@ public class MainScene extends Scene {
 
     private Pane initDiagram() {
         diagram.currentMode.bind(Bindings.createObjectBinding(
-                () -> Mode.valueOf(((ToggleButton) toggleGroup.selectedToggleProperty().getValue()).getText()),
+                () -> Mode.valueOf(((ToggleButton) toggleGroup.selectedToggleProperty().getValue()).getId()),
                 toggleGroup.selectedToggleProperty()
         ));
         return diagram;
