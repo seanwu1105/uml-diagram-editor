@@ -43,7 +43,6 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
         initName();
 
         parentProperty().addListener((observableValue, oldParent, newParent) -> {
-            System.out.println(decorations);
             if (newParent != null) {
                 ((Pane) getParent()).getChildren().add(shape);
                 ((Pane) getParent()).getChildren().addAll(decorations);

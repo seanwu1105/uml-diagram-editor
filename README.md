@@ -4,7 +4,7 @@ A toy UML diagram editor.
 
 ## Introduction
 
-This is an assignment for Object-Oriented Analysis and Design (SE6029*) in NCU, Taiwan. A complete implementation of the [specification](#Spec).
+This is an assignment for _Object-Oriented Analysis and Design_ (SE6029*) in NCU, Taiwan. A complete implementation of the [specification](#Spec).
 
 ## Getting Start
 
@@ -14,7 +14,7 @@ Clone this repository.
 git clone https://github.com/seanwu1105/uml-diagram-editor.git
 ```
 
-Use IntelliJ IDEA (recommended) or other Java IDE to open the project.
+Use [IntelliJ IDEA](https://www.jetbrains.com/idea/) (recommended) or other Java IDE to open the project.
 
 ## Spec
 
