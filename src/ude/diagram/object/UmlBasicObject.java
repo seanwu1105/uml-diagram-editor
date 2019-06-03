@@ -15,7 +15,7 @@ import javafx.scene.text.TextAlignment;
 import java.util.*;
 
 
-public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject {
+public abstract class UmlBasicObject<T extends Shape> extends Rectangle implements UmlBaseObject {
     private final static double PORT_LENGTH = 10;
     private final Map<Side, Rectangle> ports = Map.of(
             Side.TOP, new Rectangle(PORT_LENGTH, PORT_LENGTH),
@@ -25,13 +25,13 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
     );
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
     Set<Shape> decorations = new HashSet<>();
-    public Shape shape;
+    private T shape;
     public Text name = new Text();
     private UmlCompositeObject group = null;
     // for the drag event, the original coordinates of when pressed the mouse
     private double draggingOriginalX, draggingOriginalY;
 
-    UmlBasicObject(Shape shape, double x, double y, double width, double height) {
+    UmlBasicObject(T shape, double x, double y, double width, double height) {
         super(x, y, width, height);
         setFill(Color.TRANSPARENT);
 
@@ -53,7 +53,6 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
             }
         });
     }
-
 
     @Override
     public void select() {
@@ -111,6 +110,10 @@ public abstract class UmlBasicObject extends Rectangle implements UmlBaseObject 
             setX(getX() + offsetX);
             setY(getY() + offsetY);
         }
+    }
+
+    public T getShape() {
+        return shape;
     }
 
     public boolean isInside(double x1, double y1, double x2, double y2) {

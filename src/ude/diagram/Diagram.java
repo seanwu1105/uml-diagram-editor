@@ -26,7 +26,7 @@ import java.util.Set;
 public class Diagram extends Pane {
     public final ObservableSet<UmlBasicObject> selectedBasicObjects = FXCollections.observableSet(new HashSet<>());
     public final ObservableSet<UmlBaseObject> selectedGroupRoots = FXCollections.observableSet(new HashSet<>());
-    private final Set<UmlBasicObject> basicObjects = new HashSet<>();
+    private final Set<UmlBasicObject<? extends Shape>> basicObjects = new HashSet<>();
     private final Set<AssociationConnection> connections = new HashSet<>();
     public ObjectProperty<MainScene.Mode> currentMode = new SimpleObjectProperty<>();
     private SelectingArea selectingArea = null;
@@ -130,7 +130,7 @@ public class Diagram extends Pane {
         addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (newShape instanceof UmlBasicObject) {
                 e.consume();    // only in SELECT mode can UML basicObjects be selected (get MOUSE_PRESSED event)
-                UmlBasicObject newBasicObject = (UmlBasicObject) newShape;
+                UmlBasicObject<? extends Shape> newBasicObject = (UmlBasicObject<? extends Shape>) newShape;
                 newBasicObject.selectedProperty().addListener((observableValue, oldBoolean, newBoolean) -> {
                     if (newBoolean)
                         selectedBasicObjects.add(newBasicObject);
@@ -148,7 +148,7 @@ public class Diagram extends Pane {
         addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (newShape instanceof AssociationConnection) {
                 e.consume();    // only in SELECT mode can UML basicObjects be selected (get MOUSE_PRESSED event)
-                UmlBasicObject lineSource = getUmlBasicObject(e.getTarget());
+                UmlBasicObject<? extends Shape> lineSource = getUmlBasicObject(e.getTarget());
                 if (lineSource != null) {
                     AssociationConnection newConnection = (AssociationConnection) newShape;
                     List<ObservableValue<Number>> sourcePortPosition = lineSource.getClosestPortPositionProperty(e.getX(), e.getY());
@@ -162,7 +162,7 @@ public class Diagram extends Pane {
 
         addEventHandler(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
             if (currentMode.getValue() != MainScene.Mode.SELECT && newShape instanceof AssociationConnection) {
-                UmlBasicObject lineTarget = getUmlBasicObject(e.getTarget());
+                UmlBasicObject<? extends Shape> lineTarget = getUmlBasicObject(e.getTarget());
                 if (lineTarget != null) {
                     AssociationConnection newConnection = (AssociationConnection) newShape;
                     List<ObservableValue<Number>> sourcePortPosition = lineTarget.getClosestPortPositionProperty(e.getX(), e.getY());
@@ -173,8 +173,8 @@ public class Diagram extends Pane {
         });
     }
 
-    private UmlBasicObject getUmlBasicObject(EventTarget eventTarget) {
-        UmlBasicObject umlBasicObject;
+    private UmlBasicObject<? extends Shape> getUmlBasicObject(EventTarget eventTarget) {
+        UmlBasicObject<? extends Shape> umlBasicObject;
         try {
             umlBasicObject = getUmlBasicObject((Shape) eventTarget);
         } catch (ClassCastException | NoSuchElementException exception) {
@@ -183,9 +183,9 @@ public class Diagram extends Pane {
         return umlBasicObject;
     }
 
-    private UmlBasicObject getUmlBasicObject(Shape shape) throws NoSuchElementException {
-        for (UmlBasicObject umlBasicObject : basicObjects)
-            if (umlBasicObject.shape == shape)
+    private UmlBasicObject<? extends Shape> getUmlBasicObject(Shape shape) throws NoSuchElementException {
+        for (UmlBasicObject<? extends Shape> umlBasicObject : basicObjects)
+            if (umlBasicObject.getShape() == shape)
                 return umlBasicObject;
         throw new NoSuchElementException("Cannot find the UmlShape in basicObjects set.");
     }

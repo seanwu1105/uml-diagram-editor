@@ -11,9 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("UML Diagram Editor");
-
         primaryStage.setScene(new MainScene());
-
         primaryStage.show();
     }
 }
