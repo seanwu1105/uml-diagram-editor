@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Shape;
 import ude.diagram.Diagram;
+import ude.diagram.UmlBaseShape;
 import ude.diagram.connection.AssociationConnection;
 import ude.diagram.connection.CompositionConnection;
 import ude.diagram.connection.GeneralizationConnection;
@@ -99,38 +100,38 @@ public class MainScene extends Scene {
     public enum Mode implements shapeFactory {
         SELECT {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return null;
             }
         }, ASSOCIATE {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return new AssociationConnection(x, y);
             }
         }, GENERALIZE {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return new GeneralizationConnection(x, y);
             }
         }, COMPOSITE {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return new CompositionConnection(x, y);
             }
         }, CLASS {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return new UmlClassObject(x, y);
             }
         }, USE_CASE {
             @Override
-            public Shape getNewShape(double x, double y) {
+            public UmlBaseShape getNewShape(double x, double y) {
                 return new UmlUseCaseObject(x, y);
             }
         }
     }
 
     private interface shapeFactory {
-        Shape getNewShape(double x, double y);
+        UmlBaseShape getNewShape(double x, double y);
     }
 }
