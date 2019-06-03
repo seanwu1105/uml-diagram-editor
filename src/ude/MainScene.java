@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Shape;
 import ude.diagram.Diagram;
 import ude.diagram.UmlBaseShape;
 import ude.diagram.connection.AssociationConnection;

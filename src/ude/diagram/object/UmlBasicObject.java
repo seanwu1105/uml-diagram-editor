@@ -3,7 +3,6 @@ package ude.diagram.object;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -27,9 +26,9 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
             Side.LEFT, new Rectangle(PORT_LENGTH, PORT_LENGTH)
     );
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
+    public Text name = new Text();
     Set<Shape> decorations = new HashSet<>();
     private T shape;
-    public Text name = new Text();
     private UmlCompositeObject group = null;
     // for the drag event, the original coordinates of when pressed the mouse
     private double draggingOriginalX, draggingOriginalY;
@@ -49,8 +48,7 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
             if (newParent != null) {
                 ((Pane) getParent()).getChildren().add(shape);
                 ((Pane) getParent()).getChildren().addAll(decorations);
-            }
-            else {
+            } else {
                 ((Pane) getParent()).getChildren().remove(shape);
                 ((Pane) oldParent).getChildren().removeAll(decorations);
             }
