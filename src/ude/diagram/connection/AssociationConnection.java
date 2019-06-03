@@ -17,7 +17,7 @@ public class AssociationConnection extends Line implements UmlBaseShape {
     }
 
     @Override
-    public void onCreate(MouseEvent event, Diagram diagram) {
+    public void onCreated(MouseEvent event, Diagram diagram) {
         event.consume();    // only in SELECT mode can UML basicObjects be selected (get MOUSE_PRESSED event)
         UmlBasicObject<? extends Shape> lineSource = diagram.getUmlBasicObject(event.getTarget());
         if (lineSource != null) {

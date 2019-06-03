@@ -129,7 +129,7 @@ public class Diagram extends Pane {
     private void initMouseEventListenerForUmlBaseShape() {
         addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (currentMode.getValue() != MainScene.Mode.SELECT) {
-                newShape.onCreate(e, this);
+                newShape.onCreated(e, this);
             }
         });
     }

@@ -114,7 +114,7 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
     }
 
     @Override
-    public void onCreate(MouseEvent event, Diagram diagram) {
+    public void onCreated(MouseEvent event, Diagram diagram) {
         event.consume();
         selectedProperty().addListener((observableValue, oldBoolean, newBoolean) -> {
             if (newBoolean)
