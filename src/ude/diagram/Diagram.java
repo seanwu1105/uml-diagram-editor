@@ -26,11 +26,11 @@ import java.util.Set;
 public class Diagram extends Pane {
     public final ObservableSet<UmlBasicObject> selectedBasicObjects = FXCollections.observableSet(new HashSet<>());
     public final ObservableSet<UmlBaseObject> selectedGroupRoots = FXCollections.observableSet(new HashSet<>());
-    public final Set<UmlBasicObject<? extends Shape>> basicObjects = new HashSet<>();
-    public final Set<AssociationConnection> connections = new HashSet<>();
+    private final Set<UmlBasicObject<? extends Shape>> basicObjects = new HashSet<>();
+    private final Set<AssociationConnection> connections = new HashSet<>();
     public ObjectProperty<MainScene.Mode> currentMode = new SimpleObjectProperty<>();
     private SelectingArea selectingArea = null;
-    private UmlBaseShape newShape;
+    private Shape newShape;
 
     public Diagram() {
         setMinSize(500, 500);
@@ -83,7 +83,7 @@ public class Diagram extends Pane {
         addEventFilter(MouseEvent.MOUSE_PRESSED, e -> newShape = currentMode.getValue().getNewShape(e.getX(), e.getY()));
         addEventFilter(MouseEvent.DRAG_DETECTED, e -> startFullDrag());
         initMouseEventListenerForSelection();
-        initMouseEventListenerForUmlBaseShape();
+        initMouseEventListenerForUmlObject();
         initMouseEventListenerForConnection();
     }
 
@@ -126,15 +126,40 @@ public class Diagram extends Pane {
         });
     }
 
-    private void initMouseEventListenerForUmlBaseShape() {
+    private void initMouseEventListenerForUmlObject() {
         addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            if (currentMode.getValue() != MainScene.Mode.SELECT) {
-                newShape.onCreated(e, this);
+            if (newShape instanceof UmlBasicObject) {
+                e.consume();    // only in SELECT mode can UML basicObjects be selected (get MOUSE_PRESSED event)
+                UmlBasicObject<? extends Shape> newBasicObject = (UmlBasicObject<? extends Shape>) newShape;
+                newBasicObject.selectedProperty().addListener((observableValue, oldBoolean, newBoolean) -> {
+                    if (newBoolean)
+                        selectedBasicObjects.add(newBasicObject);
+                    else
+                        selectedBasicObjects.remove(newBasicObject);
+                });
+
+                basicObjects.add(newBasicObject);
+                getChildren().add(newBasicObject);
             }
         });
     }
 
     private void initMouseEventListenerForConnection() {
+        addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            if (newShape instanceof AssociationConnection) {
+                e.consume();    // only in SELECT mode can UML basicObjects be selected (get MOUSE_PRESSED event)
+                UmlBasicObject<? extends Shape> lineSource = getUmlBasicObject(e.getTarget());
+                if (lineSource != null) {
+                    AssociationConnection newConnection = (AssociationConnection) newShape;
+                    List<ObservableValue<Number>> sourcePortPosition = lineSource.getClosestPortPositionProperty(e.getX(), e.getY());
+                    newConnection.startXProperty().bind(sourcePortPosition.get(0));
+                    newConnection.startYProperty().bind(sourcePortPosition.get(1));
+                    connections.add(newConnection);
+                    getChildren().add(newConnection);
+                }
+            }
+        });
+
         addEventHandler(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
             if (currentMode.getValue() != MainScene.Mode.SELECT && newShape instanceof AssociationConnection) {
                 UmlBasicObject<? extends Shape> lineTarget = getUmlBasicObject(e.getTarget());
@@ -148,7 +173,7 @@ public class Diagram extends Pane {
         });
     }
 
-    public UmlBasicObject<? extends Shape> getUmlBasicObject(EventTarget eventTarget) {
+    private UmlBasicObject<? extends Shape> getUmlBasicObject(EventTarget eventTarget) {
         UmlBasicObject<? extends Shape> umlBasicObject;
         try {
             umlBasicObject = getUmlBasicObject((Shape) eventTarget);

@@ -7,8 +7,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Shape;
 import ude.diagram.Diagram;
-import ude.diagram.UmlBaseShape;
 import ude.diagram.connection.AssociationConnection;
 import ude.diagram.connection.CompositionConnection;
 import ude.diagram.connection.GeneralizationConnection;
@@ -99,38 +99,38 @@ public class MainScene extends Scene {
     public enum Mode implements shapeFactory {
         SELECT {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return null;
             }
         }, ASSOCIATE {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return new AssociationConnection(x, y);
             }
         }, GENERALIZE {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return new GeneralizationConnection(x, y);
             }
         }, COMPOSITE {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return new CompositionConnection(x, y);
             }
         }, CLASS {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return new UmlClassObject(x, y);
             }
         }, USE_CASE {
             @Override
-            public UmlBaseShape getNewShape(double x, double y) {
+            public Shape getNewShape(double x, double y) {
                 return new UmlUseCaseObject(x, y);
             }
         }
     }
 
     private interface shapeFactory {
-        UmlBaseShape getNewShape(double x, double y);
+        Shape getNewShape(double x, double y);
     }
 }
