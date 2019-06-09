@@ -11,13 +11,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import ude.diagram.Diagram;
-import ude.diagram.UmlBaseShape;
 
 import java.util.*;
 
 
-public abstract class UmlBasicObject<T extends Shape> extends Rectangle implements UmlBaseShape, UmlBaseObject {
+public abstract class UmlBasicObject<T extends Shape> extends Rectangle implements UmlBaseObject {
     private final static double PORT_LENGTH = 10;
     private final Map<Side, Rectangle> ports = Map.of(
             Side.TOP, new Rectangle(PORT_LENGTH, PORT_LENGTH),
@@ -26,9 +24,9 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
             Side.LEFT, new Rectangle(PORT_LENGTH, PORT_LENGTH)
     );
     private final BooleanProperty isSelected = new SimpleBooleanProperty(false);
-    public Text name = new Text();
     Set<Shape> decorations = new HashSet<>();
     private T shape;
+    public Text name = new Text();
     private UmlCompositeObject group = null;
     // for the drag event, the original coordinates of when pressed the mouse
     private double draggingOriginalX, draggingOriginalY;
@@ -48,7 +46,8 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
             if (newParent != null) {
                 ((Pane) getParent()).getChildren().add(shape);
                 ((Pane) getParent()).getChildren().addAll(decorations);
-            } else {
+            }
+            else {
                 ((Pane) getParent()).getChildren().remove(shape);
                 ((Pane) oldParent).getChildren().removeAll(decorations);
             }
@@ -111,20 +110,6 @@ public abstract class UmlBasicObject<T extends Shape> extends Rectangle implemen
             setX(getX() + offsetX);
             setY(getY() + offsetY);
         }
-    }
-
-    @Override
-    public void onCreated(MouseEvent event, Diagram diagram) {
-        event.consume();
-        selectedProperty().addListener((observableValue, oldBoolean, newBoolean) -> {
-            if (newBoolean)
-                diagram.selectedBasicObjects.add(this);
-            else
-                diagram.selectedBasicObjects.remove(this);
-        });
-
-        diagram.basicObjects.add(this);
-        diagram.getChildren().add(this);
     }
 
     public T getShape() {
