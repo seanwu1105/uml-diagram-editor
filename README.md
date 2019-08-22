@@ -14,7 +14,7 @@ Clone this repository.
 git clone https://github.com/seanwu1105/uml-diagram-editor.git
 ```
 
-Use [IntelliJ IDEA](https://www.jetbrains.com/idea/) (recommended) or other Java IDE to open the project.
+Use [IntelliJ IDEA](https://www.jetbrains.com/idea/) to open the project. This project require `JDK >= 12` and `JavaFX >= 12` (dependencies maintained by the [Gradle script](build.gradle)).
 
 ## Spec
 
