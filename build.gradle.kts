@@ -1,5 +1,6 @@
 plugins {
     java
+    jacoco
 }
 
 group = "io.github.seanwu1105"
@@ -10,7 +11,20 @@ repositories {
 }
 
 dependencies {
-    testImplementation("junit", "junit", "4.12")
+    testImplementation("org.junit.jupiter", "junit-jupiter", "5.6.2")
+}
+
+tasks {
+    test {
+        useJUnitPlatform()
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            html.isEnabled = false
+        }
+    }
 }
 
 configure<JavaPluginConvention> {
