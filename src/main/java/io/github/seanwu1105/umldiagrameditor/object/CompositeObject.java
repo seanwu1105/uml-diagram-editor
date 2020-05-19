@@ -42,11 +42,6 @@ public class CompositeObject implements UmlObject {
     }
 
     @Override
-    public void setPosition(@NotNull final Position position) {
-        children.forEach(child -> child.setPosition(position));
-    }
-
-    @Override
     public void move(final int xOffset, final int yOffset) {
         children.forEach(child -> child.move(xOffset, yOffset));
     }

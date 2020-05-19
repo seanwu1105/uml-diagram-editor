@@ -28,7 +28,6 @@ public class BasicObject implements UmlObject {
         return position;
     }
 
-    @Override
     public void setPosition(@NotNull final Position position) {
         this.position = position;
     }
