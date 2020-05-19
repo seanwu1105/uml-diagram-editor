@@ -18,7 +18,7 @@ Use [IntelliJ IDEA](https://www.jetbrains.com/idea/) to open the project. This p
 
 ## Spec
 
-The following is a prototype UI for the MUL editor.
+The following is a prototype UI for the UML editor.
 ![ui preview](https://i.imgur.com/syXfSsS.png)
 
 This UML editor UI is divided into three regions. The first region allows users to place diagrams and make connections. This area is called "canvas area". On the left-hand side is a region called "taskbar" containing a lot of buttons for tool selections.
