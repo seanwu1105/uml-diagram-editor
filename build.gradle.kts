@@ -11,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jetbrains", "annotations", "19.0.0")
+
     testImplementation("org.junit.jupiter", "junit-jupiter", "5.6.2")
 }
 
@@ -28,5 +30,5 @@ tasks {
 }
 
 configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
 }
