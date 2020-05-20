@@ -20,13 +20,11 @@ class UmlObjectTest {
     private CompositeObject parent;
     @NotNull
     private Iterable<UmlObject> objects;
-    @NotNull
-    private Iterable<UmlObject> nestedObjects;
 
     @BeforeEach
     void buildUp() {
         allBasicObjects = List.of(new BasicObject(), new BasicObject(), new BasicObject());
-        nestedObjects = Set.of(allBasicObjects.get(0), allBasicObjects.get(1));
+        final Iterable<UmlObject> nestedObjects = Set.of(allBasicObjects.get(0), allBasicObjects.get(1));
         final var nested = new CompositeObject();
         nested.group(nestedObjects);
         objects = Set.of(allBasicObjects.get(2), nested);
@@ -54,7 +52,7 @@ class UmlObjectTest {
     }
 
     @Test
-    void testMoveGroupFromParent() {
+    void testMove() {
         final var original = 11;
         allBasicObjects.forEach(basicObject -> basicObject.setPosition(new Position(original, original)));
 
@@ -63,9 +61,5 @@ class UmlObjectTest {
 
         final var moved = new Position(original + offset, original + offset);
         allBasicObjects.forEach(basicObject -> assertEquals(moved, basicObject.getPosition()));
-    }
-
-    @Test
-    void testMoveGroupFromChild() {
     }
 }
