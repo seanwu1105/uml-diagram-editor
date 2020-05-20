@@ -41,6 +41,12 @@ public class CompositeObject implements UmlObject {
     }
 
     @Override
+    public @NotNull UmlObject getTopObject() {
+        if (parent == null) return this;
+        return parent.getTopObject();
+    }
+
+    @Override
     public void move(final int xOffset, final int yOffset) {
         children.forEach(child -> child.move(xOffset, yOffset));
     }

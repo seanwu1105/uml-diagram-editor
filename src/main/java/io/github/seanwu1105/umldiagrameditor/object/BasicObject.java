@@ -23,6 +23,12 @@ public class BasicObject implements UmlObject {
         this.parent = parent;
     }
 
+    @Override
+    public @NotNull UmlObject getTopObject() {
+        if (parent == null) return this;
+        return parent.getTopObject();
+    }
+
     @NotNull
     public Position getPosition() {
         return position;

@@ -62,4 +62,12 @@ class UmlObjectTest {
         final var moved = new Position(original + offset, original + offset);
         allBasicObjects.forEach(basicObject -> assertEquals(moved, basicObject.getPosition()));
     }
+
+    @Test
+    void testGetTopObject() {
+        assertAll(
+                () -> assertEquals(parent, parent.getTopObject()),
+                () -> allBasicObjects.forEach(basicObject -> assertEquals(parent, basicObject.getTopObject()))
+        );
+    }
 }
