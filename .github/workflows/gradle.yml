@@ -18,6 +18,8 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build -S
+        env:
+          _JAVA_OPTIONS: -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw
 
       - name: Generate coverage report
         run: ./gradlew jacocoTestReport

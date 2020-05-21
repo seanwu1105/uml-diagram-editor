@@ -45,4 +45,5 @@ dependencies {
     testImplementation("org.testfx", "testfx-core", "4.0.16-alpha")
     testImplementation("org.testfx", "testfx-junit5", "4.0.16-alpha")
     testImplementation("org.hamcrest", "hamcrest", "2.2")
+    testImplementation("org.testfx", "openjfx-monocle", "jdk-11+26")
 }
