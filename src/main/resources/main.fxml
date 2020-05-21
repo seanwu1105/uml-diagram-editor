@@ -22,6 +22,6 @@
         </VBox>
     </left>
     <center>
-        <Canvas fx:id="canvas" minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
+        <Canvas fx:id="canvas" fx:factory="getInstance" minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
     </center>
 </BorderPane>
