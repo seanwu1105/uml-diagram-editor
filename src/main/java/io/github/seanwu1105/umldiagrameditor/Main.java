@@ -18,7 +18,6 @@ public class Main extends Application {
     public void start(final Stage primaryStage) throws IOException {
         final var loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/main.fxml"));
-        final MainController controller = loader.getController();
         final BorderPane hierarchy = loader.load();
         final var mainScene = new Scene(hierarchy);
         primaryStage.setScene(mainScene);
