@@ -1,4 +1,4 @@
-package io.github.seanwu1105.umldiagrameditor.object;
+package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

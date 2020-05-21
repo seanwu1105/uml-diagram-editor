@@ -1,9 +1,10 @@
-package io.github.seanwu1105.umldiagrameditor.object;
+package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
+import io.github.seanwu1105.umldiagrameditor.diagram.UmlComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-interface UmlObject {
+public interface UmlObject extends UmlComponent {
 
     @Nullable
     CompositeObject getParent();

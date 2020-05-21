@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import io.github.seanwu1105.umldiagrameditor.diagram.Diagram?>
+<?import io.github.seanwu1105.umldiagrameditor.canvas.Canvas?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -22,6 +22,6 @@
         </VBox>
     </left>
     <center>
-        <Diagram minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
+        <Canvas fx:id="canvas" minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
     </center>
 </BorderPane>
