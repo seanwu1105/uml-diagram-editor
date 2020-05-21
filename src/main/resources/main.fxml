@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.seanwu1105.umldiagrameditor.diagram.Diagram?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="io.github.seanwu1105.umldiagrameditor.MainController">
+    <top>
+        <MenuBar>
+            <Menu text="File"/>
+            <Menu text="Edit">
+                <MenuItem text="Group"/>
+                <MenuItem text="Ungroup"/>
+                <MenuItem text="Change object name"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <left>
+        <VBox fx:id="toolBar" style="-fx-background-color: #E5E5E5">
+        </VBox>
+    </left>
+    <center>
+        <Diagram minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
+    </center>
+</BorderPane>
