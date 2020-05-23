@@ -1,4 +1,4 @@
-package io.github.seanwu1105.umldiagrameditor.model;
+package io.github.seanwu1105.umldiagrameditor.diagram;
 
 public class Position {
 

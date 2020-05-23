@@ -1,11 +1,12 @@
 package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
-import io.github.seanwu1105.umldiagrameditor.model.Position;
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BasicObjectTest {
 
@@ -19,10 +20,33 @@ class BasicObjectTest {
 
     @Test
     void testPosition() {
-        final var expect = new Position(1, 2);
-        final var basicObject = new BasicObject();
-        basicObject.setPosition(expect);
-        assertEquals(expect, basicObject.getPosition());
+        final var expectedPosition = new Position(1, 2);
+        basicObject.setPosition(expectedPosition);
+        assertEquals(expectedPosition, basicObject.getPosition());
+    }
+
+    @Test
+    void testWidth() {
+        final var expectedWidth = 3;
+        basicObject.setWidth(expectedWidth);
+        assertEquals(expectedWidth, basicObject.getWidth());
+    }
+
+    @Test
+    void testIllegalWidth() {
+        assertThrows(IllegalArgumentException.class, () -> basicObject.setWidth(-2));
+    }
+
+    @Test
+    void testHeight() {
+        final var expectedHeight = 4;
+        basicObject.setHeight(expectedHeight);
+        assertEquals(expectedHeight, basicObject.getHeight());
+    }
+
+    @Test
+    void testIllegalHeight() {
+        assertThrows(IllegalArgumentException.class, () -> basicObject.setHeight(-5));
     }
 
     @Test

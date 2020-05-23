@@ -1,5 +1,6 @@
-package io.github.seanwu1105.umldiagrameditor.model;
+package io.github.seanwu1105.umldiagrameditor.diagram;
 
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertAll;

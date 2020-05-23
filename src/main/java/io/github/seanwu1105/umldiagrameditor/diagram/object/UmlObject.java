@@ -1,10 +1,16 @@
 package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
-import io.github.seanwu1105.umldiagrameditor.diagram.UmlComponent;
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface UmlObject extends UmlComponent {
+public interface UmlObject {
+
+    @NotNull Position getPosition();
+
+    int getHeight();
+
+    int getWidth();
 
     @Nullable
     CompositeObject getParent();
