@@ -23,7 +23,11 @@ class UmlObjectTest {
 
     @BeforeEach
     void buildUp() {
-        allBasicObjects = List.of(new BasicObject(), new BasicObject(), new BasicObject());
+        allBasicObjects = List.of(
+                new BasicObject(BasicObject.ObjectType.CLASS),
+                new BasicObject(BasicObject.ObjectType.CLASS),
+                new BasicObject(BasicObject.ObjectType.CLASS)
+        );
         final Iterable<UmlObject> nestedObjects = Set.of(allBasicObjects.get(0), allBasicObjects.get(1));
         final var nested = new CompositeObject();
         nested.group(nestedObjects);

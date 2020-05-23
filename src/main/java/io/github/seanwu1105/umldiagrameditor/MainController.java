@@ -20,7 +20,8 @@ public class MainController implements Initializable {
     private final Mode defaultMode = ModeFactory.createSelectMode();
     private final Iterable<Mode> modes = List.of(
             defaultMode,
-            ModeFactory.createAddClassObjectMode()
+            ModeFactory.createAddClassObjectMode(),
+            ModeFactory.createAddUseCaseObjectMode()
     );
     private final ToggleGroup toolToggleGroup = new ToggleGroup();
     @FXML

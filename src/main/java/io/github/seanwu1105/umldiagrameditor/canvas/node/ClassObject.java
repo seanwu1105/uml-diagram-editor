@@ -1,17 +1,17 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.node;
 
-import io.github.seanwu1105.umldiagrameditor.diagram.Position;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 public class ClassObject extends Rectangle {
 
-    public ClassObject(@NotNull final Position position, final int width, final int height) {
-        setX(position.getX());
-        setY(position.getY());
-        setWidth(width);
-        setHeight(height);
+    public ClassObject(@NotNull final UmlObject umlObject) {
+        setX(umlObject.getPosition().getX());
+        setY(umlObject.getPosition().getY());
+        setWidth(umlObject.getWidth());
+        setHeight(umlObject.getHeight());
         initAppearance();
     }
 

@@ -21,7 +21,7 @@ class DiagramTest {
     @Test
     void testAddObject() {
         final var listener = mock(DiagramEventListener.class);
-        final var newObject = new BasicObject();
+        final var newObject = new BasicObject(BasicObject.ObjectType.CLASS);
         diagram.addOnAddedListener(listener);
         diagram.addObject(newObject);
         verify(listener).updated(newObject);

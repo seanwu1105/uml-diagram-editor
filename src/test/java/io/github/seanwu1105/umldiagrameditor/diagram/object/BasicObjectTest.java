@@ -15,7 +15,12 @@ class BasicObjectTest {
 
     @BeforeEach
     void buildUp() {
-        basicObject = new BasicObject();
+        basicObject = new BasicObject(BasicObject.ObjectType.CLASS);
+    }
+
+    @Test
+    void shouldBeClassObjectType() {
+        assertEquals(BasicObject.ObjectType.CLASS, basicObject.getObjectType());
     }
 
     @Test
