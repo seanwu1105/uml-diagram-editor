@@ -19,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.testfx.api.FxAssert.verifyThat;
 
+// TODO: create an issue to TestFx about:
+//       1. Robot fails to work in headless mode.
+//       2. Robot will move the mouse to (0, 0) in sequential tests.
+
 @ExtendWith(ApplicationExtension.class)
 class CanvasTest {
 
