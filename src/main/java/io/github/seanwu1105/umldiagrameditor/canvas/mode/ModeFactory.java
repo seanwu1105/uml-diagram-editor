@@ -8,14 +8,14 @@ public class ModeFactory {
 
     @NotNull
     public static Mode createSelectMode() {
-        final var mode = new Mode("select");
+        final var mode = new Mode(ModeId.SELECT);
         mode.setMousePressedHandler(new NoHandler());
         return mode;
     }
 
     @NotNull
     public static Mode createAddClassObjectMode() {
-        final var mode = new Mode("class");
+        final var mode = new Mode(ModeId.CLASS);
         mode.setMousePressedHandler(new CreateClassObjectHandler());
         return mode;
     }

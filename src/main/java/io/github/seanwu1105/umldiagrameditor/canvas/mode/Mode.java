@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 public class Mode {
 
     @NotNull
-    private final String id;
+    private final ModeId id;
     @NotNull
     private EventHandler<MouseEvent> mousePressedHandler = new NoHandler();
 
-    Mode(@NotNull final String id) {
+    Mode(@NotNull final ModeId id) {
         this.id = id;
     }
 
     @NotNull
-    public String getId() {
+    public ModeId getId() {
         return id;
     }
 

@@ -36,7 +36,7 @@ public class MainController implements Initializable {
     private void initializeToolBar() {
         modes.forEach(mode -> {
             final var button = new RadioButton();
-            button.setId(mode.getId());
+            button.setId(mode.getId().toString());
             button.setGraphic(new ImageView(mode.getIcon()));
             button.setToggleGroup(toolToggleGroup);
             button.setSelected(mode.equals(defaultMode));
@@ -47,7 +47,8 @@ public class MainController implements Initializable {
         toolToggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             final var toggled = (Styleable) newValue;
             modes.forEach(mode -> {
-                if (mode.getId().equals(toggled.getId())) canvas.setMode(mode);
+                final var modeId = mode.getId();
+                if (modeId.toString().equals(toggled.getId())) canvas.setMode(mode);
             });
         });
     }
