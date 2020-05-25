@@ -31,7 +31,6 @@ class CanvasTest {
 
     @Start
     private void start(@NotNull final Stage stage) {
-        System.out.println("start");
         canvas = Canvas.getNewInstance();
         final var scene = new Scene(canvas);
         stage.setScene(scene);
@@ -40,7 +39,7 @@ class CanvasTest {
 
     @Test
     void shouldCreateClassObject(@NotNull final FxRobotInterface robot) {
-        canvas.setMode(ModeFactory.createAddClassObjectMode());
+        canvas.setMode(ModeFactory.getAddClassObjectMode());
 
         robot.clickOn(canvas);
 
@@ -52,7 +51,7 @@ class CanvasTest {
 
     @Test
     void shouldCreateDifferentClassObjects(@NotNull final FxRobotInterface robot) {
-        canvas.setMode(ModeFactory.createAddClassObjectMode());
+        canvas.setMode(ModeFactory.getAddClassObjectMode());
 
         robot.clickOn(canvas);
         robot.clickOn(canvas);
@@ -65,7 +64,7 @@ class CanvasTest {
 
     @Test
     void shouldCreateUseCaseObject(@NotNull final FxRobotInterface robot) {
-        canvas.setMode(ModeFactory.createAddUseCaseObjectMode());
+        canvas.setMode(ModeFactory.getAddUseCaseObjectMode());
 
         robot.clickOn(canvas);
 
@@ -77,7 +76,7 @@ class CanvasTest {
 
     @Test
     void shouldCreateDifferentUseCaseObjects(@NotNull final FxRobotInterface robot) {
-        canvas.setMode(ModeFactory.createAddUseCaseObjectMode());
+        canvas.setMode(ModeFactory.getAddUseCaseObjectMode());
 
         robot.clickOn(canvas);
         robot.clickOn(canvas);

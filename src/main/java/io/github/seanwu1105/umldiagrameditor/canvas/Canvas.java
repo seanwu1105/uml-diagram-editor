@@ -24,7 +24,7 @@ public final class Canvas extends Pane {
     @NotNull
     private final Diagram diagram;
     @NotNull
-    private Mode mode = ModeFactory.createSelectMode();
+    private Mode mode = ModeFactory.getSelectMode();
 
     private Canvas(@NotNull final Diagram diagram) {
         this.diagram = diagram;

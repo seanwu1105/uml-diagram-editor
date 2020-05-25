@@ -17,11 +17,11 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    private final Mode defaultMode = ModeFactory.createSelectMode();
+    private final Mode defaultMode = ModeFactory.getSelectMode();
     private final Iterable<Mode> modes = List.of(
             defaultMode,
-            ModeFactory.createAddClassObjectMode(),
-            ModeFactory.createAddUseCaseObjectMode()
+            ModeFactory.getAddClassObjectMode(),
+            ModeFactory.getAddUseCaseObjectMode()
     );
     private final ToggleGroup toolToggleGroup = new ToggleGroup();
     @FXML
