@@ -1,8 +1,8 @@
 package io.github.seanwu1105.umldiagrameditor.canvas;
 
 import io.github.seanwu1105.umldiagrameditor.canvas.mode.ModeFactory;
-import io.github.seanwu1105.umldiagrameditor.canvas.node.ClassObject;
-import io.github.seanwu1105.umldiagrameditor.canvas.node.UseCaseObject;
+import io.github.seanwu1105.umldiagrameditor.canvas.graph.ClassObject;
+import io.github.seanwu1105.umldiagrameditor.canvas.graph.UseCaseObject;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
