@@ -27,8 +27,8 @@ public class UseCaseObject extends GraphicComponent<Ellipse> {
     }
 
     @Override
-    void bindContainer(final @NotNull Ellipse shape) {
-        shape.centerXProperty().bind(getContainer().xProperty().add(getContainer().getWidth() / 2));
-        shape.centerYProperty().bind(getContainer().yProperty().add(getContainer().getHeight() / 2));
+    void bindBox(final @NotNull Ellipse shape) {
+        shape.centerXProperty().bind(getBox().xProperty().add(getBox().getWidth() / 2));
+        shape.centerYProperty().bind(getBox().yProperty().add(getBox().getHeight() / 2));
     }
 }

@@ -27,8 +27,8 @@ public class ClassObject extends GraphicComponent<Rectangle> {
     }
 
     @Override
-    void bindContainer(@NotNull final Rectangle shape) {
-        shape.xProperty().bind(getContainer().xProperty());
-        shape.yProperty().bind(getContainer().yProperty());
+    void bindBox(@NotNull final Rectangle shape) {
+        shape.xProperty().bind(getBox().xProperty());
+        shape.yProperty().bind(getBox().yProperty());
     }
 }

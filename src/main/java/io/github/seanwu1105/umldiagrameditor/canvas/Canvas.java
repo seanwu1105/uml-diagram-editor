@@ -9,6 +9,7 @@ import io.github.seanwu1105.umldiagrameditor.diagram.Diagram;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -40,11 +41,11 @@ public final class Canvas extends Pane {
     private void initDiagramListeners() {
         diagram.addOnAddedListener(umlObject -> {
             final var graphic = mapToGraphicComponent((BasicObject) umlObject);
-            getChildren().addAll(graphic.getShape(), graphic.getContainer());
+            getChildren().add(graphic);
         });
     }
 
-    private GraphicComponent mapToGraphicComponent(@NotNull final BasicObject basicObject) {
+    private GraphicComponent<? extends Shape> mapToGraphicComponent(@NotNull final BasicObject basicObject) {
         return OBJECT_TYPE_TO_GRAPHIC_COMPONENT_MAP.get(basicObject.getObjectType()).create(basicObject);
     }
 
@@ -57,6 +58,6 @@ public final class Canvas extends Pane {
     }
 
     private interface ShapeFactory {
-        GraphicComponent create(@NotNull final BasicObject basicObject);
+        GraphicComponent<? extends Shape> create(@NotNull final BasicObject basicObject);
     }
 }
