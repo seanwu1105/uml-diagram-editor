@@ -8,7 +8,5 @@ public class NoHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(final @NotNull MouseEvent event) {
-        System.out.println("event.getSource() = " + event.getSource());
-        System.out.println("event.getTarget() = " + event.getTarget());
     }
 }

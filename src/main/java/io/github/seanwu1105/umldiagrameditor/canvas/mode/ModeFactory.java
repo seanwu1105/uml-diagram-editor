@@ -2,7 +2,8 @@ package io.github.seanwu1105.umldiagrameditor.canvas.mode;
 
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateClassObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateUseCaseObjectHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.NoHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DeselectAllObjectsHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectObjectHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,8 @@ public class ModeFactory {
         if (SELECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.SELECT);
-                mode.setMousePressedHandler(new NoHandler());
+                mode.setMousePressedOnCanvasHandler(new DeselectAllObjectsHandler());
+                mode.setMousePressedOnGraphicComponentHandler(new SelectObjectHandler());
                 SELECT_MODE = mode;
             }
         }
@@ -32,7 +34,7 @@ public class ModeFactory {
         if (ADD_CLASS_OBJECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.CLASS);
-                mode.setMousePressedHandler(new CreateClassObjectHandler());
+                mode.setMousePressedOnCanvasHandler(new CreateClassObjectHandler());
                 ADD_CLASS_OBJECT_MODE = mode;
             }
         }
@@ -44,7 +46,7 @@ public class ModeFactory {
         if (ADD_USE_CASE_OBJECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.USE_CASE);
-                mode.setMousePressedHandler(new CreateUseCaseObjectHandler());
+                mode.setMousePressedOnCanvasHandler(new CreateUseCaseObjectHandler());
                 ADD_USE_CASE_OBJECT_MODE = mode;
             }
         }

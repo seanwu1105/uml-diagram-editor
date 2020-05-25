@@ -30,7 +30,7 @@ public final class Canvas extends Pane {
     private Canvas(@NotNull final Diagram diagram) {
         this.diagram = diagram;
         initDiagramListeners();
-        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressed(event));
+        addEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressedOnCanvas(event));
     }
 
     @NotNull
@@ -41,6 +41,7 @@ public final class Canvas extends Pane {
     private void initDiagramListeners() {
         diagram.addOnAddedListener(umlObject -> {
             final var graphic = mapToGraphicComponent((BasicObject) umlObject);
+            graphic.addShapeEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressedOnGraphicComponent(event));
             getChildren().add(graphic);
         });
     }
@@ -55,6 +56,13 @@ public final class Canvas extends Pane {
 
     public void addObject(@NotNull final BasicObject basicObject) {
         diagram.addObject(basicObject);
+    }
+
+    public void deselectAll() {
+        getChildrenUnmodifiable().forEach(child -> {
+            final var graphicComponent = (GraphicComponent<? extends Shape>) child;
+            graphicComponent.deselect();
+        });
     }
 
     private interface ShapeFactory {

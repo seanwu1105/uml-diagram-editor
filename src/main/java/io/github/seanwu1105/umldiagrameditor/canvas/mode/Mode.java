@@ -11,7 +11,9 @@ public class Mode {
     @NotNull
     private final ModeId id;
     @NotNull
-    private EventHandler<MouseEvent> mousePressedHandler = new NoHandler();
+    private EventHandler<MouseEvent> mousePressedOnCanvasHandler = new NoHandler();
+    @NotNull
+    private EventHandler<MouseEvent> mousePressedOnGraphicComponentHandler = new NoHandler();
 
     Mode(@NotNull final ModeId id) {
         this.id = id;
@@ -29,11 +31,19 @@ public class Mode {
         return new Image(getClass().getResourceAsStream(imagePath + id + imageFileExtension));
     }
 
-    public void onMousePressed(@NotNull final MouseEvent mouseEvent) {
-        mousePressedHandler.handle(mouseEvent);
+    public void onMousePressedOnCanvas(@NotNull final MouseEvent mouseEvent) {
+        mousePressedOnCanvasHandler.handle(mouseEvent);
     }
 
-    void setMousePressedHandler(@NotNull final EventHandler<MouseEvent> mousePressedHandler) {
-        this.mousePressedHandler = mousePressedHandler;
+    void setMousePressedOnCanvasHandler(@NotNull final EventHandler<MouseEvent> handler) {
+        this.mousePressedOnCanvasHandler = handler;
+    }
+
+    public void onMousePressedOnGraphicComponent(@NotNull final MouseEvent mouseEvent) {
+        mousePressedOnGraphicComponentHandler.handle(mouseEvent);
+    }
+
+    void setMousePressedOnGraphicComponentHandler(@NotNull final EventHandler<MouseEvent> handler) {
+        this.mousePressedOnGraphicComponentHandler = handler;
     }
 }
