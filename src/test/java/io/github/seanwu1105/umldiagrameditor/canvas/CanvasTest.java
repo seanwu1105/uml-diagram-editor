@@ -1,8 +1,8 @@
 package io.github.seanwu1105.umldiagrameditor.canvas;
 
-import io.github.seanwu1105.umldiagrameditor.canvas.mode.ModeFactory;
 import io.github.seanwu1105.umldiagrameditor.canvas.graph.ClassObject;
 import io.github.seanwu1105.umldiagrameditor.canvas.graph.UseCaseObject;
+import io.github.seanwu1105.umldiagrameditor.canvas.mode.ModeFactory;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ class CanvasTest {
 
         assertAll(
                 () -> verifyThat(canvas, ParentMatchers.hasChildren(1)),
-                () -> assertThat(canvas.getChildren().get(0), instanceOf(ClassObject.class))
+                () -> assertThat(canvas.getChildrenUnmodifiable().get(0), instanceOf(ClassObject.class))
         );
     }
 
@@ -58,7 +58,7 @@ class CanvasTest {
 
         assertAll(
                 () -> verifyThat(canvas, ParentMatchers.hasChildren(2)),
-                () -> assertNotEquals(canvas.getChildren().get(0), canvas.getChildren().get(1))
+                () -> assertNotEquals(canvas.getChildrenUnmodifiable().get(0), canvas.getChildrenUnmodifiable().get(1))
         );
     }
 
@@ -70,7 +70,7 @@ class CanvasTest {
 
         assertAll(
                 () -> verifyThat(canvas, ParentMatchers.hasChildren(1)),
-                () -> assertThat(canvas.getChildren().get(0), instanceOf(UseCaseObject.class))
+                () -> assertThat(canvas.getChildrenUnmodifiable().get(0), instanceOf(UseCaseObject.class))
         );
     }
 
@@ -83,7 +83,7 @@ class CanvasTest {
 
         assertAll(
                 () -> verifyThat(canvas, ParentMatchers.hasChildren(2)),
-                () -> assertNotEquals(canvas.getChildren().get(0), canvas.getChildren().get(1))
+                () -> assertNotEquals(canvas.getChildrenUnmodifiable().get(0), canvas.getChildrenUnmodifiable().get(1))
         );
     }
 }

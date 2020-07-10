@@ -4,6 +4,10 @@ import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateClassObje
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateUseCaseObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DeselectAllObjectsHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectObjectHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.CreateSelectingAreaHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.RemoveSelectingAreaHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.ResizeSelectingAreaHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,8 +25,10 @@ public class ModeFactory {
         if (SELECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.SELECT);
-                mode.setMousePressedOnCanvasHandler(new DeselectAllObjectsHandler());
-                mode.setMousePressedOnGraphicComponentHandler(new SelectObjectHandler());
+                mode.setMousePressedOnCanvasHandlers(new CreateSelectingAreaHandler(), new DeselectAllObjectsHandler());
+                mode.setMouseDraggedOnCanvasHandlers(new ResizeSelectingAreaHandler());
+                mode.setMouseReleasedOnCanvasHandlers(new RemoveSelectingAreaHandler());
+                mode.setMousePressedOnGraphicComponentHandlers(new SelectObjectHandler());
                 SELECT_MODE = mode;
             }
         }
@@ -34,7 +40,7 @@ public class ModeFactory {
         if (ADD_CLASS_OBJECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.CLASS);
-                mode.setMousePressedOnCanvasHandler(new CreateClassObjectHandler());
+                mode.setMousePressedOnCanvasHandlers(new CreateClassObjectHandler());
                 ADD_CLASS_OBJECT_MODE = mode;
             }
         }
@@ -46,7 +52,7 @@ public class ModeFactory {
         if (ADD_USE_CASE_OBJECT_MODE == null) {
             synchronized (ModeFactory.class) {
                 final var mode = new Mode(ModeId.USE_CASE);
-                mode.setMousePressedOnCanvasHandler(new CreateUseCaseObjectHandler());
+                mode.setMousePressedOnCanvasHandlers(new CreateUseCaseObjectHandler());
                 ADD_USE_CASE_OBJECT_MODE = mode;
             }
         }

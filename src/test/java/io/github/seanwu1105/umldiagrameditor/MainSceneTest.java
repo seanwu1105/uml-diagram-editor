@@ -19,7 +19,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 class MainSceneTest {
 
     @Start
-    private void start(@NotNull final Stage stage) throws IOException {
+    void start(@NotNull final Stage stage) throws IOException {
         final var loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/main.fxml"));
         final BorderPane hierarchy = loader.load();

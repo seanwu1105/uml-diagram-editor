@@ -1,6 +1,7 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.mousehandler;
 
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 
 public class CreateUseCaseObjectHandler extends CreateObjectHandler {
 
@@ -9,7 +10,7 @@ public class CreateUseCaseObjectHandler extends CreateObjectHandler {
 
     @Override
     BasicObject createObject() {
-        final var newObject = new BasicObject(BasicObject.ObjectType.USE_CASE);
+        final var newObject = new BasicObject(ObjectType.USE_CASE);
         newObject.setWidth(WIDTH);
         newObject.setHeight(HEIGHT);
         return newObject;

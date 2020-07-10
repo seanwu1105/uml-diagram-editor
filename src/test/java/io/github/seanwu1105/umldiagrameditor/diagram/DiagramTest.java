@@ -1,6 +1,7 @@
 package io.github.seanwu1105.umldiagrameditor.diagram;
 
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class DiagramTest {
     @Test
     void testAddObject() {
         final var listener = mock(DiagramEventListener.class);
-        final var newObject = new BasicObject(BasicObject.ObjectType.CLASS);
+        final var newObject = new BasicObject(ObjectType.CLASS);
         diagram.addOnAddedListener(listener);
         diagram.addObject(newObject);
         verify(listener).updated(newObject);

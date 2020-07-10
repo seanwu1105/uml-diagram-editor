@@ -1,6 +1,7 @@
 package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
 import io.github.seanwu1105.umldiagrameditor.diagram.Position;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +16,12 @@ class BasicObjectTest {
 
     @BeforeEach
     void buildUp() {
-        basicObject = new BasicObject(BasicObject.ObjectType.CLASS);
+        basicObject = new BasicObject(ObjectType.CLASS);
     }
 
     @Test
     void shouldBeClassObjectType() {
-        assertEquals(BasicObject.ObjectType.CLASS, basicObject.getObjectType());
+        assertEquals(ObjectType.CLASS, basicObject.getObjectType());
     }
 
     @Test

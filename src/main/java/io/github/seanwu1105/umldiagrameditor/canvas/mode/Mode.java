@@ -1,19 +1,26 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.mode;
 
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.NoHandler;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class Mode {
 
     @NotNull
     private final ModeId id;
     @NotNull
-    private EventHandler<MouseEvent> mousePressedOnCanvasHandler = new NoHandler();
+    private final Collection<EventHandler<MouseEvent>> mousePressedOnCanvasHandlers = new HashSet<>();
     @NotNull
-    private EventHandler<MouseEvent> mousePressedOnGraphicComponentHandler = new NoHandler();
+    private final Collection<EventHandler<MouseEvent>> mouseDraggedOnCanvasHandlers = new HashSet<>();
+    @NotNull
+    private final Collection<EventHandler<MouseEvent>> mouseReleasedOnCanvasHandlers = new HashSet<>();
+    @NotNull
+    private final Collection<EventHandler<MouseEvent>> mousePressedOnGraphicComponentHandlers = new HashSet<>();
 
     Mode(@NotNull final ModeId id) {
         this.id = id;
@@ -32,18 +39,42 @@ public class Mode {
     }
 
     public void onMousePressedOnCanvas(@NotNull final MouseEvent mouseEvent) {
-        mousePressedOnCanvasHandler.handle(mouseEvent);
+        mousePressedOnCanvasHandlers.forEach(handler -> handler.handle(mouseEvent));
     }
 
-    void setMousePressedOnCanvasHandler(@NotNull final EventHandler<MouseEvent> handler) {
-        this.mousePressedOnCanvasHandler = handler;
+    public void onMouseDraggedOnCanvas(@NotNull final MouseEvent mouseEvent) {
+        mouseDraggedOnCanvasHandlers.forEach(handler -> handler.handle(mouseEvent));
+    }
+
+    public void onMouseReleasedOnCanvas(@NotNull final MouseEvent mouseEvent) {
+        mouseReleasedOnCanvasHandlers.forEach(handler -> handler.handle(mouseEvent));
+    }
+
+    @SafeVarargs
+    final void setMousePressedOnCanvasHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
+        mousePressedOnCanvasHandlers.clear();
+        mousePressedOnCanvasHandlers.addAll(Arrays.asList(handlers));
+    }
+
+    @SafeVarargs
+    final void setMouseDraggedOnCanvasHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
+        mouseDraggedOnCanvasHandlers.clear();
+        mouseDraggedOnCanvasHandlers.addAll(Arrays.asList(handlers));
+    }
+
+    @SafeVarargs
+    final void setMouseReleasedOnCanvasHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
+        mouseReleasedOnCanvasHandlers.clear();
+        mouseReleasedOnCanvasHandlers.addAll(Arrays.asList(handlers));
     }
 
     public void onMousePressedOnGraphicComponent(@NotNull final MouseEvent mouseEvent) {
-        mousePressedOnGraphicComponentHandler.handle(mouseEvent);
+        mousePressedOnGraphicComponentHandlers.forEach(handler -> handler.handle(mouseEvent));
     }
 
-    void setMousePressedOnGraphicComponentHandler(@NotNull final EventHandler<MouseEvent> handler) {
-        this.mousePressedOnGraphicComponentHandler = handler;
+    @SafeVarargs
+    final void setMousePressedOnGraphicComponentHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
+        mousePressedOnGraphicComponentHandlers.clear();
+        mousePressedOnGraphicComponentHandlers.addAll(Arrays.asList(handlers));
     }
 }

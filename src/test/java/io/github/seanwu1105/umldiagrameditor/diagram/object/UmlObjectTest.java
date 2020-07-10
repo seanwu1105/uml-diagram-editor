@@ -1,6 +1,7 @@
 package io.github.seanwu1105.umldiagrameditor.diagram.object;
 
 import io.github.seanwu1105.umldiagrameditor.diagram.Position;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +25,9 @@ class UmlObjectTest {
     @BeforeEach
     void buildUp() {
         allBasicObjects = List.of(
-                new BasicObject(BasicObject.ObjectType.CLASS),
-                new BasicObject(BasicObject.ObjectType.CLASS),
-                new BasicObject(BasicObject.ObjectType.CLASS)
+                new BasicObject(ObjectType.CLASS),
+                new BasicObject(ObjectType.CLASS),
+                new BasicObject(ObjectType.CLASS)
         );
         final Iterable<UmlObject> nestedObjects = Set.of(allBasicObjects.get(0), allBasicObjects.get(1));
         final var nested = new CompositeObject();

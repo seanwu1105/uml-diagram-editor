@@ -7,7 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class CreateObjectHandler implements EventHandler<MouseEvent> {
+abstract class CreateObjectHandler implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(final @NotNull MouseEvent event) {
