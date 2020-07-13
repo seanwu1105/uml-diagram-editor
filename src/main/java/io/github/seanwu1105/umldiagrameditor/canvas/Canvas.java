@@ -37,6 +37,7 @@ public final class Canvas extends Pane {
     private Canvas(@NotNull final Diagram diagram) {
         this.diagram = diagram;
         initDiagramListeners();
+        initDiagramClipper();
         addEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressedOnCanvas(event));
         addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> mode.onMouseDraggedOnCanvas(event));
         addEventFilter(MouseEvent.MOUSE_RELEASED, event -> mode.onMouseReleasedOnCanvas(event));
@@ -45,6 +46,13 @@ public final class Canvas extends Pane {
     @NotNull
     public static Canvas getNewInstance() {
         return new Canvas(new Diagram());
+    }
+
+    private void initDiagramClipper() {
+        final var clipper = new Rectangle();
+        clipper.heightProperty().bind(heightProperty());
+        clipper.widthProperty().bind(widthProperty());
+        setClip(clipper);
     }
 
     private void initDiagramListeners() {
