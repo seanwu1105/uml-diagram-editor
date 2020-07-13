@@ -1,5 +1,6 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.graph;
 
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -88,5 +89,14 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
 
     private void hidePorts() {
         getChildren().removeAll(ports.values());
+    }
+
+    public boolean isInside(@NotNull final Position position1, final @NotNull Position position2) {
+        final var topLeft = new Position(Math.min(position1.getX(), position2.getX()), Math.min(position1.getY(), position2.getY()));
+        final var bottomRight = new Position(Math.max(position1.getX(), position2.getX()), Math.max(position1.getY(), position2.getY()));
+        return (getBox().getX() >= topLeft.getX()
+                && getBox().getY() >= topLeft.getY()
+                && getBox().getX() + getBox().getWidth() <= bottomRight.getX()
+                && getBox().getY() + getBox().getHeight() <= bottomRight.getY());
     }
 }

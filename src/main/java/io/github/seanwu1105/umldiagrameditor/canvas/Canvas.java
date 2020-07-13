@@ -6,6 +6,7 @@ import io.github.seanwu1105.umldiagrameditor.canvas.graph.UseCaseObject;
 import io.github.seanwu1105.umldiagrameditor.canvas.mode.Mode;
 import io.github.seanwu1105.umldiagrameditor.canvas.mode.ModeFactory;
 import io.github.seanwu1105.umldiagrameditor.diagram.Diagram;
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 import javafx.scene.input.MouseEvent;
@@ -66,18 +67,29 @@ public final class Canvas extends Pane {
         diagram.addObject(basicObject);
     }
 
-    public void createSelectingArea(final double x, final double y) {
-        selectingArea = new SelectingArea(x, y);
+    public void createSelectingArea(@NotNull final Position position) {
+        selectingArea = new SelectingArea(position);
         getChildren().add(selectingArea);
     }
 
-    public void resizeSelectingArea(final double x, final double y) {
-        if (selectingArea != null) selectingArea.setResizingCursorPosition(x, y);
+    public void resizeSelectingArea(@NotNull final Position position) {
+        if (selectingArea != null) selectingArea.setResizingCursorPosition(position);
     }
 
     public void removeSelectingArea() {
         getChildren().remove(selectingArea);
         selectingArea = null;
+    }
+
+    public void selectInArea(@NotNull final Position position) {
+        if (selectingArea != null) {
+            getChildrenUnmodifiable().forEach(child -> {
+                if (child instanceof GraphicComponent) {
+                    final var graphicComponent = (GraphicComponent<? extends Shape>) child;
+                    if (graphicComponent.isInside(selectingArea.initialPosition, position)) graphicComponent.select();
+                }
+            });
+        }
     }
 
     public void deselectAll() {
@@ -94,29 +106,26 @@ public final class Canvas extends Pane {
     }
 
     private static class SelectingArea extends Rectangle {
-        double initialX;
-        double initialY;
+        @NotNull Position initialPosition;
 
-        SelectingArea(final double initialX, final double initialY) {
-            super(initialX, initialY, 0, 0);
+        SelectingArea(@NotNull final Position position) {
+            super(position.getX(), position.getY(), 0, 0);
             setFill(Color.TRANSPARENT);
             setStroke(Color.STEELBLUE);
-            this.initialX = initialX;
-            this.initialY = initialY;
+            initialPosition = position;
         }
 
-        void setResizingCursorPosition(final double x, final double y) {
-            final var xOffset = x - initialX;
-            final var yOffset = y - initialY;
-            if (xOffset >= 0) setWidth(xOffset);
+        void setResizingCursorPosition(@NotNull final Position position) {
+            final var offset = position.subtract(initialPosition);
+            if (offset.getX() >= 0) setWidth(offset.getX());
             else {
-                setX(x);
-                setWidth(-xOffset);
+                setX(position.getX());
+                setWidth(-offset.getX());
             }
-            if (yOffset >= 0) setHeight(yOffset);
+            if (offset.getY() >= 0) setHeight(offset.getY());
             else {
-                setY(y);
-                setHeight(-yOffset);
+                setY(position.getY());
+                setHeight(-offset.getY());
             }
         }
     }

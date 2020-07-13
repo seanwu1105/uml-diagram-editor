@@ -4,7 +4,6 @@ import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateClassObje
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateUseCaseObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DeselectAllObjectsHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectObjectHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.CreateSelectingAreaHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.RemoveSelectingAreaHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.ResizeSelectingAreaHandler;

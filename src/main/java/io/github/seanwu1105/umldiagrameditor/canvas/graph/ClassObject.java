@@ -1,5 +1,6 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.graph;
 
+import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

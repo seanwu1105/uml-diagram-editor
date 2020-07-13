@@ -35,7 +35,7 @@ public class BasicObject implements UmlObject {
     }
 
     @Override
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
@@ -46,7 +46,7 @@ public class BasicObject implements UmlObject {
     }
 
     @Override
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 

@@ -8,9 +8,9 @@ public interface UmlObject {
 
     @NotNull Position getPosition();
 
-    int getHeight();
+    double getHeight();
 
-    int getWidth();
+    double getWidth();
 
     @Nullable
     CompositeObject getParent();
