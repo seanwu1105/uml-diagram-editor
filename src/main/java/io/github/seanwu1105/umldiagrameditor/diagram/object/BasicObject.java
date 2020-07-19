@@ -4,7 +4,7 @@ import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BasicObject implements UmlObject {
+public class BasicObject extends UmlObject {
 
     @NotNull
     private final ObjectType objectType;
@@ -74,8 +74,8 @@ public class BasicObject implements UmlObject {
     }
 
     @Override
-    public void move(final int xOffset, final int yOffset) {
-        setPosition(new Position(position.getX() + xOffset, position.getY() + yOffset));
+    protected void move(final double xOffset, final double yOffset) {
+        setPosition(new Position(getPosition().getX() + xOffset, getPosition().getY() + yOffset));
     }
 
     public enum ObjectType {

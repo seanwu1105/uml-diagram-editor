@@ -59,10 +59,12 @@ public final class Canvas extends Pane {
         diagram.addOnAddedListener(umlObject -> {
             final var graphic = mapToGraphicComponent((BasicObject) umlObject);
             graphic.addShapeEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressedOnGraphicComponent(event));
+            graphic.addShapeEventFilter(MouseEvent.MOUSE_DRAGGED, event -> mode.onMouseDraggedOnGraphicComponent(event));
             getChildren().add(graphic);
         });
     }
 
+    @NotNull
     private GraphicComponent<? extends Shape> mapToGraphicComponent(@NotNull final BasicObject basicObject) {
         return OBJECT_TYPE_TO_GRAPHIC_COMPONENT_MAP.get(basicObject.getObjectType()).create(basicObject);
     }
@@ -110,11 +112,14 @@ public final class Canvas extends Pane {
     }
 
     private interface ShapeFactory {
+        @NotNull
         GraphicComponent<? extends Shape> create(@NotNull final BasicObject basicObject);
     }
 
     private static class SelectingArea extends Rectangle {
-        @NotNull Position initialPosition;
+
+        @NotNull
+        final Position initialPosition;
 
         SelectingArea(@NotNull final Position position) {
             super(position.getX(), position.getY(), 0, 0);

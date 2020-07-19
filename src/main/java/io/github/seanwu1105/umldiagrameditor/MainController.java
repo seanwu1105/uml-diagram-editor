@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 import java.util.List;
@@ -17,12 +18,15 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
+    @NotNull
     private final Mode defaultMode = ModeFactory.getSelectMode();
+    @NotNull
     private final Iterable<Mode> modes = List.of(
             defaultMode,
             ModeFactory.getAddClassObjectMode(),
             ModeFactory.getAddUseCaseObjectMode()
     );
+    @NotNull
     private final ToggleGroup toolToggleGroup = new ToggleGroup();
     @FXML
     private VBox toolBar;

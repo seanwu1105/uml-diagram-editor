@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 
-public class CompositeObject implements UmlObject {
+public class CompositeObject extends UmlObject {
 
     @NotNull
     private Iterable<UmlObject> children = new HashSet<>();
@@ -47,6 +47,7 @@ public class CompositeObject implements UmlObject {
         this.children = children;
     }
 
+    @NotNull
     public Iterable<UmlObject> ungroup() {
         final var children = getChildren();
         this.children = new HashSet<>();
@@ -77,7 +78,7 @@ public class CompositeObject implements UmlObject {
     }
 
     @Override
-    public void move(final int xOffset, final int yOffset) {
+    protected void move(final double xOffset, final double yOffset) {
         getChildren().forEach(child -> child.move(xOffset, yOffset));
     }
 }

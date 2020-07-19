@@ -3,6 +3,8 @@ package io.github.seanwu1105.umldiagrameditor.canvas.mode;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateClassObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateUseCaseObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DeselectAllObjectsHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DragObjectHandlers.OnDraggingHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DragObjectHandlers.StartDraggingHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectObjectHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.CreateSelectingAreaHandler;
 import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.RemoveSelectingAreaHandler;
@@ -27,7 +29,8 @@ public class ModeFactory {
                 mode.setMousePressedOnCanvasHandlers(new CreateSelectingAreaHandler(), new DeselectAllObjectsHandler());
                 mode.setMouseDraggedOnCanvasHandlers(new ResizeSelectingAreaHandler());
                 mode.setMouseReleasedOnCanvasHandlers(new RemoveSelectingAreaHandler());
-                mode.setMousePressedOnGraphicComponentHandlers(new SelectObjectHandler());
+                mode.setMousePressedOnGraphicComponentHandlers(new SelectObjectHandler(), new StartDraggingHandler());
+                mode.setMouseDraggedOnGraphicComponentHandlers(new OnDraggingHandler());
                 SELECT_MODE = mode;
             }
         }

@@ -12,12 +12,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
 public abstract class GraphicComponent<T extends Shape> extends Group {
 
     private static final double PORT_SIZE = 10;
+    @NotNull
+    private final UmlObject umlObject;
     @NotNull
     private final Rectangle box = new Rectangle();
     @NotNull
@@ -29,16 +32,27 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
             Side.LEFT, new Rectangle(PORT_SIZE, PORT_SIZE),
             Side.BOTTOM, new Rectangle(PORT_SIZE, PORT_SIZE)
     );
+    @Nullable
+    private Position originalDraggingPosition;
 
     GraphicComponent(@NotNull final UmlObject umlObject) {
-        initBox(umlObject);
+        this.umlObject = umlObject;
+        initListeners();
+        initBox();
 
         shape = initShape(umlObject);
         bindBox(shape);
         getChildren().addAll(box, shape);
     }
 
-    private void initBox(@NotNull final UmlObject umlObject) {
+    private void initListeners() {
+        umlObject.addOnMovedListener(movedUmlObject -> {
+            getBox().setX(movedUmlObject.getPosition().getX());
+            getBox().setY(movedUmlObject.getPosition().getY());
+        });
+    }
+
+    private void initBox() {
         getBox().setX(umlObject.getPosition().getX());
         getBox().setY(umlObject.getPosition().getY());
         getBox().setWidth(umlObject.getWidth());
@@ -50,6 +64,13 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
     abstract T initShape(@NotNull final UmlObject umlObject);
 
     abstract void bindBox(@NotNull final T shape);
+
+    public void moveTo(@NotNull final Position position) {
+        if (originalDraggingPosition != null) {
+            final var offset = position.subtract(originalDraggingPosition);
+            umlObject.drag(offset.getX(), offset.getY());
+        }
+    }
 
     @NotNull Rectangle getBox() {
         return box;
@@ -98,5 +119,9 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
                 && getBox().getY() >= topLeft.getY()
                 && getBox().getX() + getBox().getWidth() <= bottomRight.getX()
                 && getBox().getY() + getBox().getHeight() <= bottomRight.getY());
+    }
+
+    public void setOriginalDraggingPosition(@NotNull final Position originalDraggingPosition) {
+        this.originalDraggingPosition = originalDraggingPosition;
     }
 }

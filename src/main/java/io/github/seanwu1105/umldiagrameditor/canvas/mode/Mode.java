@@ -21,6 +21,8 @@ public class Mode {
     private final Collection<EventHandler<MouseEvent>> mouseReleasedOnCanvasHandlers = new HashSet<>();
     @NotNull
     private final Collection<EventHandler<MouseEvent>> mousePressedOnGraphicComponentHandlers = new HashSet<>();
+    @NotNull
+    private final Collection<EventHandler<MouseEvent>> mouseDraggedOnGraphicComponentHandlers = new HashSet<>();
 
     Mode(@NotNull final ModeId id) {
         this.id = id;
@@ -72,9 +74,19 @@ public class Mode {
         mousePressedOnGraphicComponentHandlers.forEach(handler -> handler.handle(mouseEvent));
     }
 
+    public void onMouseDraggedOnGraphicComponent(@NotNull final MouseEvent mouseEvent) {
+        mouseDraggedOnGraphicComponentHandlers.forEach(handler -> handler.handle(mouseEvent));
+    }
+
     @SafeVarargs
     final void setMousePressedOnGraphicComponentHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
         mousePressedOnGraphicComponentHandlers.clear();
         mousePressedOnGraphicComponentHandlers.addAll(Arrays.asList(handlers));
+    }
+
+    @SafeVarargs
+    final void setMouseDraggedOnGraphicComponentHandlers(@NotNull final EventHandler<MouseEvent>... handlers) {
+        mouseDraggedOnGraphicComponentHandlers.clear();
+        mouseDraggedOnGraphicComponentHandlers.addAll(Arrays.asList(handlers));
     }
 }

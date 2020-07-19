@@ -4,21 +4,40 @@ import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface UmlObject {
+import java.util.Collection;
+import java.util.HashSet;
 
-    @NotNull Position getPosition();
-
-    double getHeight();
-
-    double getWidth();
-
-    @Nullable
-    CompositeObject getParent();
-
-    void setParent(@Nullable CompositeObject parent);
+public abstract class UmlObject {
 
     @NotNull
-    UmlObject getTopObject();
+    private final Collection<UmlObjectEventListener> onMovedListeners = new HashSet<>();
 
-    void move(int xOffset, int yOffset);
+    public abstract @NotNull Position getPosition();
+
+    public abstract double getHeight();
+
+    public abstract double getWidth();
+
+    @Nullable
+    public abstract CompositeObject getParent();
+
+    public abstract void setParent(@Nullable CompositeObject parent);
+
+    @NotNull
+    public abstract UmlObject getTopObject();
+
+    protected abstract void move(final double xOffset, final double yOffset);
+
+    public void drag(final double xOffset, final double yOffset) {
+        move(xOffset, yOffset);
+        onMovedListeners.forEach(listener -> listener.updated(this));
+    }
+
+    public void addOnMovedListener(@NotNull final UmlObjectEventListener listener) {
+        onMovedListeners.add(listener);
+    }
+
+    public interface UmlObjectEventListener {
+        void updated(@NotNull final UmlObject umlObject);
+    }
 }

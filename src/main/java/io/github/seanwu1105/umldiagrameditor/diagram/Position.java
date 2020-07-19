@@ -1,6 +1,7 @@
 package io.github.seanwu1105.umldiagrameditor.diagram;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Position {
 
@@ -26,7 +27,7 @@ public class Position {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(@Nullable final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -47,6 +48,7 @@ public class Position {
         return result;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "(" + getX() + ", " + getY() + ")";

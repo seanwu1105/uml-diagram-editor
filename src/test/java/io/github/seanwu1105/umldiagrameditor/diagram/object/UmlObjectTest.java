@@ -69,16 +69,16 @@ class UmlObjectTest {
         allBasicObjects.get(2).setHeight(2);
 
         final var expectedX = allBasicObjects.stream()
-                .mapToInt(basic -> basic.getPosition().getX())
+                .mapToDouble(basic -> basic.getPosition().getX())
                 .min().orElseThrow();
         final var expectedY = allBasicObjects.stream()
-                .mapToInt(basic -> basic.getPosition().getY())
+                .mapToDouble(basic -> basic.getPosition().getY())
                 .min().orElseThrow();
         final var expectedWidth = allBasicObjects.stream()
-                .mapToInt(basic -> basic.getPosition().getX() + basic.getWidth())
+                .mapToDouble(basic -> basic.getPosition().getX() + basic.getWidth())
                 .max().orElseThrow() - expectedX;
         final var expectedHeight = allBasicObjects.stream()
-                .mapToInt(basic -> basic.getPosition().getY() + basic.getHeight())
+                .mapToDouble(basic -> basic.getPosition().getY() + basic.getHeight())
                 .max().orElseThrow() - expectedY;
         assertAll(
                 () -> assertEquals(new Position(expectedX, expectedY), parent.getPosition()),

@@ -17,5 +17,6 @@ abstract class CreateObjectHandler implements EventHandler<MouseEvent> {
         canvas.addObject(newObject);
     }
 
+    @NotNull
     abstract BasicObject createObject();
 }

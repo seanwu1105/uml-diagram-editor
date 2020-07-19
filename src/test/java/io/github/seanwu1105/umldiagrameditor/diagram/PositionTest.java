@@ -24,6 +24,6 @@ class PositionTest {
 
     @Test
     void testToString() {
-        assertEquals("(2, 3)", new Position(2, 3).toString());
+        assertEquals("(2.0, 3.0)", new Position(2, 3).toString());
     }
 }
