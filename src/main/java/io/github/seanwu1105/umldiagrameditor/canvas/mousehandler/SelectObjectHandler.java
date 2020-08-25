@@ -1,5 +1,6 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.mousehandler;
 
+import io.github.seanwu1105.umldiagrameditor.canvas.Canvas;
 import io.github.seanwu1105.umldiagrameditor.canvas.graph.GraphicComponent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -13,6 +14,7 @@ public class SelectObjectHandler implements EventHandler<MouseEvent> {
     public void handle(@NotNull final MouseEvent event) {
         final var source = (Node) event.getSource();
         final var graphicComponent = (GraphicComponent<? extends Shape>) source.getParent();
-        graphicComponent.select();
+        final var canvas = (Canvas) graphicComponent.getParent();
+        canvas.select(graphicComponent);
     }
 }

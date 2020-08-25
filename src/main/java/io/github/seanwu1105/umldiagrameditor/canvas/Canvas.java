@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class Canvas extends Pane {
 
@@ -96,10 +97,20 @@ public final class Canvas extends Pane {
             getChildrenUnmodifiable().forEach(child -> {
                 if (child instanceof GraphicComponent) {
                     final var graphicComponent = (GraphicComponent<? extends Shape>) child;
-                    if (graphicComponent.isInside(selectingArea.initialPosition, position)) graphicComponent.select();
+                    if (graphicComponent.isInside(selectingArea.initialPosition, position)) select(graphicComponent);
                 }
             });
         }
+    }
+
+    public void select(@NotNull final GraphicComponent<? extends Shape> graphicComponent) {
+        final var topObject = graphicComponent.getTopObject();
+        getChildrenUnmodifiable().forEach(child -> {
+            if (child instanceof GraphicComponent) {
+                final var component = (GraphicComponent<? extends Shape>) child;
+                if (component.getTopObject() == topObject) component.select();
+            }
+        });
     }
 
     public void deselectAll() {
@@ -109,6 +120,14 @@ public final class Canvas extends Pane {
                 graphicComponent.deselect();
             }
         });
+    }
+
+    public void group() {
+        final var selectedComponents = getChildrenUnmodifiable().stream()
+                .filter(child -> child instanceof GraphicComponent && ((GraphicComponent<? extends Shape>) child).isSelected())
+                .map(component -> ((GraphicComponent<?>) component).getUmlObject())
+                .collect(Collectors.toUnmodifiableList());
+        diagram.group(selectedComponents);
     }
 
     private interface ShapeFactory {

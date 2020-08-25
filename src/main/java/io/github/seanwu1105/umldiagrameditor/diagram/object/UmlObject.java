@@ -12,7 +12,8 @@ public abstract class UmlObject {
     @NotNull
     private final Collection<UmlObjectEventListener> onMovedListeners = new HashSet<>();
 
-    public abstract @NotNull Position getPosition();
+    @NotNull
+    public abstract Position getPosition();
 
     public abstract double getHeight();
 

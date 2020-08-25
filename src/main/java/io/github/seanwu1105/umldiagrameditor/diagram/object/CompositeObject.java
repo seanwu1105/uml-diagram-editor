@@ -13,8 +13,9 @@ public class CompositeObject extends UmlObject {
     @Nullable
     private CompositeObject parent;
 
+    @NotNull
     @Override
-    public @NotNull Position getPosition() {
+    public Position getPosition() {
         var xMin = Double.MAX_VALUE;
         var yMin = Double.MAX_VALUE;
         for (final var child : getChildren()) {
@@ -71,14 +72,15 @@ public class CompositeObject extends UmlObject {
         this.parent = parent;
     }
 
+    @NotNull
     @Override
-    public @NotNull UmlObject getTopObject() {
+    public UmlObject getTopObject() {
         if (parent == null) return this;
         return parent.getTopObject();
     }
 
     @Override
     protected void move(final double xOffset, final double yOffset) {
-        getChildren().forEach(child -> child.move(xOffset, yOffset));
+        getChildren().forEach(child -> child.drag(xOffset, yOffset));
     }
 }

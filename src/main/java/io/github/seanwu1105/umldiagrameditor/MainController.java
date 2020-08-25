@@ -57,4 +57,9 @@ public class MainController implements Initializable {
             });
         });
     }
+
+    @FXML
+    public void group() {
+        canvas.group();
+    }
 }

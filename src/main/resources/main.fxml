@@ -11,7 +11,7 @@
         <MenuBar>
             <Menu text="File"/>
             <Menu text="Edit">
-                <MenuItem text="Group"/>
+                <MenuItem text="Group" onAction="#group"/>
                 <MenuItem text="Ungroup"/>
                 <MenuItem text="Change object name"/>
             </Menu>
@@ -22,6 +22,12 @@
         </VBox>
     </left>
     <center>
-        <Canvas fx:id="canvas" fx:factory="getNewInstance" minHeight="500" minWidth="500" style="-fx-background-color: #DDD"/>
+        <Canvas
+                fx:id="canvas"
+                fx:factory="getNewInstance"
+                minHeight="500"
+                minWidth="500"
+                style="-fx-background-color: #DDD"
+        />
     </center>
 </BorderPane>

@@ -34,29 +34,30 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
     );
     @Nullable
     private Position originalDraggingPosition;
+    private boolean isSelected = false;
 
     GraphicComponent(@NotNull final UmlObject umlObject) {
         this.umlObject = umlObject;
         initListeners();
         initBox();
 
-        shape = initShape(umlObject);
+        shape = initShape(getUmlObject());
         bindBox(shape);
         getChildren().addAll(box, shape);
     }
 
     private void initListeners() {
-        umlObject.addOnMovedListener(movedUmlObject -> {
+        getUmlObject().addOnMovedListener(movedUmlObject -> {
             getBox().setX(movedUmlObject.getPosition().getX());
             getBox().setY(movedUmlObject.getPosition().getY());
         });
     }
 
     private void initBox() {
-        getBox().setX(umlObject.getPosition().getX());
-        getBox().setY(umlObject.getPosition().getY());
-        getBox().setWidth(umlObject.getWidth());
-        getBox().setHeight(umlObject.getHeight());
+        getBox().setX(getUmlObject().getPosition().getX());
+        getBox().setY(getUmlObject().getPosition().getY());
+        getBox().setWidth(getUmlObject().getWidth());
+        getBox().setHeight(getUmlObject().getHeight());
         getBox().setFill(Color.TRANSPARENT);
     }
 
@@ -65,10 +66,20 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
 
     abstract void bindBox(@NotNull final T shape);
 
+    @NotNull
+    public UmlObject getUmlObject() {
+        return umlObject;
+    }
+
+    @NotNull
+    public UmlObject getTopObject() {
+        return getUmlObject().getTopObject();
+    }
+
     public void moveTo(@NotNull final Position position) {
         if (originalDraggingPosition != null) {
             final var offset = position.subtract(originalDraggingPosition);
-            umlObject.drag(offset.getX(), offset.getY());
+            getTopObject().drag(offset.getX(), offset.getY());
         }
     }
 
@@ -82,8 +93,15 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
         shape.addEventFilter(eventType, eventFilter);
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
     public void select() {
-        showPorts();
+        if (!isSelected()) {
+            isSelected = true;
+            showPorts();
+        }
     }
 
     private void showPorts() {
@@ -105,7 +123,10 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
     }
 
     public void deselect() {
-        hidePorts();
+        if (isSelected()) {
+            isSelected = false;
+            hidePorts();
+        }
     }
 
     private void hidePorts() {
