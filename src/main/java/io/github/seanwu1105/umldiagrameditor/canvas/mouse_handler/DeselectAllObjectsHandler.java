@@ -1,4 +1,4 @@
-package io.github.seanwu1105.umldiagrameditor.canvas.mousehandler;
+package io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler;
 
 import io.github.seanwu1105.umldiagrameditor.canvas.Canvas;
 import javafx.event.EventHandler;

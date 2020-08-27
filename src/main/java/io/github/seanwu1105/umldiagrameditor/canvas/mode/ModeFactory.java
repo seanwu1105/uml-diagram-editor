@@ -1,14 +1,14 @@
 package io.github.seanwu1105.umldiagrameditor.canvas.mode;
 
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateClassObjectHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.CreateUseCaseObjectHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DeselectAllObjectsHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DragObjectHandlers.OnDraggingHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.DragObjectHandlers.StartDraggingHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectObjectHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.CreateSelectingAreaHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.RemoveSelectingAreaHandler;
-import io.github.seanwu1105.umldiagrameditor.canvas.mousehandler.SelectingAreaHandlers.ResizeSelectingAreaHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.CreateClassObjectHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.CreateUseCaseObjectHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.DeselectAllObjectsHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.DragObjectHandlers.OnDraggingHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.DragObjectHandlers.StartDraggingHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.SelectObjectHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.SelectingAreaHandlers.CreateSelectingAreaHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.SelectingAreaHandlers.RemoveSelectingAreaHandler;
+import io.github.seanwu1105.umldiagrameditor.canvas.mouse_handler.SelectingAreaHandlers.ResizeSelectingAreaHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
