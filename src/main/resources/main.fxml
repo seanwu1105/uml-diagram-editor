@@ -12,7 +12,7 @@
             <Menu text="File"/>
             <Menu text="Edit">
                 <MenuItem text="Group" onAction="#group"/>
-                <MenuItem text="Ungroup"/>
+                <MenuItem text="Ungroup" onAction="#ungroup"/>
                 <MenuItem text="Change object name"/>
             </Menu>
         </MenuBar>

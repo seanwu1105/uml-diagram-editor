@@ -9,6 +9,7 @@ import io.github.seanwu1105.umldiagrameditor.diagram.Diagram;
 import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
+import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,6 +18,7 @@ import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -123,11 +125,18 @@ public final class Canvas extends Pane {
     }
 
     public void group() {
-        final var selectedComponents = getChildrenUnmodifiable().stream()
-                .filter(child -> child instanceof GraphicComponent && ((GraphicComponent<? extends Shape>) child).isSelected())
+        diagram.group(getSelectedComponents());
+    }
+
+    public void ungroup() {
+        diagram.ungroup(getSelectedComponents());
+    }
+
+    private Collection<UmlObject> getSelectedComponents() {
+        return getChildrenUnmodifiable().stream()
+                .filter(child -> child instanceof GraphicComponent && ((GraphicComponent<?>) child).isSelected())
                 .map(component -> ((GraphicComponent<?>) component).getUmlObject())
-                .collect(Collectors.toUnmodifiableList());
-        diagram.group(selectedComponents);
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     private interface ShapeFactory {

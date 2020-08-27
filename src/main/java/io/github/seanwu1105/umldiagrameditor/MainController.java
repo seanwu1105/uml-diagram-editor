@@ -62,4 +62,9 @@ public class MainController implements Initializable {
     public void group() {
         canvas.group();
     }
+
+    @FXML
+    public void ungroup() {
+        canvas.ungroup();
+    }
 }

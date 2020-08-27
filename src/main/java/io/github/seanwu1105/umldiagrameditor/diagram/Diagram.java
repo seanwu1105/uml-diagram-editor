@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 public class Diagram {
 
@@ -27,11 +28,24 @@ public class Diagram {
         onAddedListeners.add(listener);
     }
 
-    // TODO: group with hierarchy
-    //  parent.group(umlObjects.map(o -> getTopObject(o).toSet())
-    public void group(@NotNull final Iterable<UmlObject> umlObjects) {
+    public void group(@NotNull final Collection<UmlObject> umlObjects) {
         final var parent = new CompositeObject();
-        parent.group(umlObjects);
+        final var topObjects = umlObjects.stream()
+                .map(UmlObject::getTopObject)
+                .collect(Collectors.toUnmodifiableSet());
+        parent.group(topObjects);
         compositeObjects.add(parent);
+    }
+
+    public void ungroup(@NotNull final Collection<UmlObject> umlObjects) {
+        umlObjects.stream()
+                .map(UmlObject::getTopObject)
+                .filter(umlObject -> umlObject instanceof CompositeObject)
+                .collect(Collectors.toUnmodifiableSet())
+                .forEach(umlObject -> {
+                    final var composite = (CompositeObject) umlObject;
+                    composite.ungroup();
+                    compositeObjects.remove(composite);
+                });
     }
 }
