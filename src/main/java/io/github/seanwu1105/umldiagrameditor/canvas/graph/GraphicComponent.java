@@ -2,6 +2,8 @@ package io.github.seanwu1105.umldiagrameditor.canvas.graph;
 
 import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -32,9 +34,10 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
             Side.LEFT, new Rectangle(PORT_SIZE, PORT_SIZE),
             Side.BOTTOM, new Rectangle(PORT_SIZE, PORT_SIZE)
     );
+    @NotNull
+    private final BooleanProperty isSelectedProperty = new SimpleBooleanProperty(false);
     @Nullable
     private Position originalDraggingPosition;
-    private boolean isSelected = false;
 
     GraphicComponent(@NotNull final UmlObject umlObject) {
         this.umlObject = umlObject;
@@ -93,13 +96,14 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
         shape.addEventFilter(eventType, eventFilter);
     }
 
-    public boolean isSelected() {
-        return isSelected;
+    @NotNull
+    public BooleanProperty getIsSelectedProperty() {
+        return isSelectedProperty;
     }
 
     public void select() {
-        if (!isSelected()) {
-            isSelected = true;
+        if (!isSelectedProperty.get()) {
+            isSelectedProperty.set(true);
             showPorts();
         }
     }
@@ -123,8 +127,8 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
     }
 
     public void deselect() {
-        if (isSelected()) {
-            isSelected = false;
+        if (isSelectedProperty.get()) {
+            isSelectedProperty.set(false);
             hidePorts();
         }
     }

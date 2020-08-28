@@ -1,8 +1,12 @@
 package io.github.seanwu1105.umldiagrameditor;
 
 import io.github.seanwu1105.umldiagrameditor.canvas.Canvas;
+import io.github.seanwu1105.umldiagrameditor.canvas.graph.GraphicComponent;
 import io.github.seanwu1105.umldiagrameditor.canvas.mode.Mode;
 import io.github.seanwu1105.umldiagrameditor.canvas.mode.ModeFactory;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.ListChangeListener;
 import javafx.css.Styleable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +14,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Shape;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
@@ -28,6 +33,10 @@ public class MainController implements Initializable {
     );
     @NotNull
     private final ToggleGroup toolToggleGroup = new ToggleGroup();
+    @NotNull
+    private final BooleanProperty isGroupDisabled = new SimpleBooleanProperty(true);
+    @NotNull
+    private final BooleanProperty isUngroupDisabled = new SimpleBooleanProperty(true);
     @FXML
     private VBox toolBar;
     @FXML
@@ -35,7 +44,16 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
+        initializeMenuBar();
         initializeToolBar();
+    }
+
+    private void initializeMenuBar() {
+        canvas.getSelectedComponents().addListener((ListChangeListener<GraphicComponent<? extends Shape>>) c -> {
+            final var components = c.getList();
+            isGroupDisabled.set(components.size() <= 0);
+            isUngroupDisabled.set(components.size() <= 1);
+        });
     }
 
     private void initializeToolBar() {
@@ -56,6 +74,38 @@ public class MainController implements Initializable {
                 if (modeId.toString().equals(toggled.getId())) canvas.setMode(mode);
             });
         });
+    }
+
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public boolean getIsGroupDisabled() {
+        return isGroupDisabled.get();
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    public void setIsGroupDisabled(final boolean value) {
+        isGroupDisabled.set(value);
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    @NotNull
+    public BooleanProperty isGroupDisabledProperty() {
+        return isGroupDisabled;
+    }
+
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public boolean getIsUngroupDisabled() {
+        return isUngroupDisabled.get();
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    public void setIsUngroupDisabled(final boolean value) {
+        isUngroupDisabled.set(value);
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    @NotNull
+    public BooleanProperty isUngroupDisabledProperty() {
+        return isUngroupDisabled;
     }
 
     @FXML

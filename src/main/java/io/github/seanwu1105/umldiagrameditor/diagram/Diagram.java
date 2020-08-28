@@ -29,12 +29,14 @@ public class Diagram {
     }
 
     public void group(@NotNull final Collection<UmlObject> umlObjects) {
-        final var parent = new CompositeObject();
         final var topObjects = umlObjects.stream()
                 .map(UmlObject::getTopObject)
                 .collect(Collectors.toUnmodifiableSet());
-        parent.group(topObjects);
-        compositeObjects.add(parent);
+        if (topObjects.size() > 1) {
+            final var parent = new CompositeObject();
+            parent.group(topObjects);
+            compositeObjects.add(parent);
+        }
     }
 
     public void ungroup(@NotNull final Collection<UmlObject> umlObjects) {

@@ -10,6 +10,8 @@ import io.github.seanwu1105.umldiagrameditor.diagram.Position;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.BasicObject.ObjectType;
 import io.github.seanwu1105.umldiagrameditor.diagram.object.UmlObject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -32,6 +34,8 @@ public final class Canvas extends Pane {
 
     @NotNull
     private final Diagram diagram;
+    @NotNull
+    private final ObservableList<GraphicComponent<? extends Shape>> selectedComponents = FXCollections.observableArrayList();
     @NotNull
     private Mode mode = ModeFactory.getSelectMode();
     @Nullable
@@ -63,7 +67,15 @@ public final class Canvas extends Pane {
             final var graphic = mapToGraphicComponent((BasicObject) umlObject);
             graphic.addShapeEventFilter(MouseEvent.MOUSE_PRESSED, event -> mode.onMousePressedOnGraphicComponent(event));
             graphic.addShapeEventFilter(MouseEvent.MOUSE_DRAGGED, event -> mode.onMouseDraggedOnGraphicComponent(event));
+            initSelectedListeners(graphic);
             getChildren().add(graphic);
+        });
+    }
+
+    private void initSelectedListeners(@NotNull final GraphicComponent<? extends Shape> graphicComponent) {
+        graphicComponent.getIsSelectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) selectedComponents.add(graphicComponent);
+            else selectedComponents.remove(graphicComponent);
         });
     }
 
@@ -124,18 +136,23 @@ public final class Canvas extends Pane {
         });
     }
 
+    @NotNull
+    public ObservableList<GraphicComponent<? extends Shape>> getSelectedComponents() {
+        return selectedComponents;
+    }
+
     public void group() {
-        diagram.group(getSelectedComponents());
+        diagram.group(getSelectedObjects());
     }
 
     public void ungroup() {
-        diagram.ungroup(getSelectedComponents());
+        diagram.ungroup(getSelectedObjects());
     }
 
-    private Collection<UmlObject> getSelectedComponents() {
-        return getChildrenUnmodifiable().stream()
-                .filter(child -> child instanceof GraphicComponent && ((GraphicComponent<?>) child).isSelected())
-                .map(component -> ((GraphicComponent<?>) component).getUmlObject())
+    @NotNull
+    private Collection<UmlObject> getSelectedObjects() {
+        return selectedComponents.stream()
+                .map(GraphicComponent::getUmlObject)
                 .collect(Collectors.toUnmodifiableSet());
     }
 

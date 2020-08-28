@@ -11,8 +11,8 @@
         <MenuBar>
             <Menu text="File"/>
             <Menu text="Edit">
-                <MenuItem text="Group" onAction="#group"/>
-                <MenuItem text="Ungroup" onAction="#ungroup"/>
+                <MenuItem text="Group" onAction="#group" disable="${controller.isGroupDisabled}"/>
+                <MenuItem text="Ungroup" onAction="#ungroup" disable="${controller.isUngroupDisabled}"/>
                 <MenuItem text="Change object name"/>
             </Menu>
         </MenuBar>
