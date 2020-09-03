@@ -13,7 +13,7 @@
             <Menu text="Edit">
                 <MenuItem text="Group" onAction="#group" disable="${controller.isGroupDisabled}"/>
                 <MenuItem text="Ungroup" onAction="#ungroup" disable="${controller.isUngroupDisabled}"/>
-                <MenuItem text="Change object name"/>
+                <MenuItem text="Change object name" onAction="#changeObjectName" disable="${controller.isChangeObjectNameDisabled}"/>
             </Menu>
         </MenuBar>
     </top>

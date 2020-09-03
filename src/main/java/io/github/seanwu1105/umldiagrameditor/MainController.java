@@ -37,6 +37,8 @@ public class MainController implements Initializable {
     private final BooleanProperty isGroupDisabled = new SimpleBooleanProperty(true);
     @NotNull
     private final BooleanProperty isUngroupDisabled = new SimpleBooleanProperty(true);
+    @NotNull
+    private final BooleanProperty isChangeObjectNameDisabled = new SimpleBooleanProperty(true);
     @FXML
     private VBox toolBar;
     @FXML
@@ -53,6 +55,7 @@ public class MainController implements Initializable {
             final var components = c.getList();
             isGroupDisabled.set(components.size() <= 0);
             isUngroupDisabled.set(components.size() <= 1);
+            isChangeObjectNameDisabled.set(components.size() != 1);
         });
     }
 
@@ -108,6 +111,22 @@ public class MainController implements Initializable {
         return isUngroupDisabled;
     }
 
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public boolean getIsChangeObjectNameDisabled() {
+        return isChangeObjectNameDisabled.get();
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    public void setIsChangeObjectNameDisabled(final boolean value) {
+        isChangeObjectNameDisabled.set(value);
+    }
+
+    @SuppressWarnings({"unused", "RedundantSuppression"})
+    @NotNull
+    public BooleanProperty isChangeObjectNameDisabledProperty() {
+        return isChangeObjectNameDisabled;
+    }
+
     @FXML
     public void group() {
         canvas.group();
@@ -116,5 +135,10 @@ public class MainController implements Initializable {
     @FXML
     public void ungroup() {
         canvas.ungroup();
+    }
+
+    @FXML
+    public void changeObjectName() {
+        System.out.println("change!");
     }
 }
