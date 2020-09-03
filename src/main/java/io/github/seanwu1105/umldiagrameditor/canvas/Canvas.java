@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -147,6 +148,20 @@ public final class Canvas extends Pane {
 
     public void ungroup() {
         diagram.ungroup(getSelectedObjects());
+    }
+
+    @NotNull
+    public List<String> getSelectedObjectNames() {
+        return getSelectedObjects().stream()
+                .filter(umlObject -> umlObject instanceof BasicObject)
+                .map(UmlObject::getName)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    public void setSelectedObjectsName(@NotNull final String name) {
+        getSelectedObjects().forEach(umlObject -> {
+            if (umlObject instanceof BasicObject) umlObject.setName(name);
+        });
     }
 
     @NotNull

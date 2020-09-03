@@ -13,6 +13,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +27,8 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
     private final UmlObject umlObject;
     @NotNull
     private final Rectangle box = new Rectangle();
+    @NotNull
+    private final Text nameText = new Text();
     @NotNull
     private final T shape;
     @NotNull
@@ -43,6 +47,7 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
         this.umlObject = umlObject;
         initListeners();
         initBox();
+        initNameText();
 
         shape = initShape(getUmlObject());
         bindBox(shape);
@@ -54,6 +59,7 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
             getBox().setX(movedUmlObject.getPosition().getX());
             getBox().setY(movedUmlObject.getPosition().getY());
         });
+        getUmlObject().addOnNameChangedListener(nameChangedUmlObject -> nameText.setText(nameChangedUmlObject.getName()));
     }
 
     private void initBox() {
@@ -62,6 +68,13 @@ public abstract class GraphicComponent<T extends Shape> extends Group {
         getBox().setWidth(getUmlObject().getWidth());
         getBox().setHeight(getUmlObject().getHeight());
         getBox().setFill(Color.TRANSPARENT);
+    }
+
+    private void initNameText() {
+        nameText.setTextAlignment(TextAlignment.CENTER);
+        nameText.xProperty().bind(getBox().xProperty());
+        nameText.yProperty().bind(getBox().yProperty().subtract(15));
+        getChildren().add(nameText);
     }
 
     @NotNull

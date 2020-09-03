@@ -10,7 +10,25 @@ import java.util.HashSet;
 public abstract class UmlObject {
 
     @NotNull
+    private final Collection<UmlObjectEventListener> onNameChangedListeners = new HashSet<>();
+    @NotNull
     private final Collection<UmlObjectEventListener> onMovedListeners = new HashSet<>();
+    @NotNull
+    private String name = "";
+
+    @NotNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull final String value) {
+        name = value;
+        onNameChangedListeners.forEach(listener -> listener.updated(this));
+    }
+
+    public void addOnNameChangedListener(@NotNull final UmlObjectEventListener listener) {
+        onNameChangedListeners.add(listener);
+    }
 
     @NotNull
     public abstract Position getPosition();

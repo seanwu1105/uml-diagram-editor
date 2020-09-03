@@ -11,6 +11,7 @@ import javafx.css.Styleable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -139,6 +140,16 @@ public class MainController implements Initializable {
 
     @FXML
     public void changeObjectName() {
-        System.out.println("change!");
+        final var names = canvas.getSelectedObjectNames();
+        if (names.size() != 1) throw new IllegalStateException("Should only selected one object on changing the name.");
+        showChangeObjectNameDialog(names.get(0));
+    }
+
+    private void showChangeObjectNameDialog(@NotNull final String oldName) {
+        final var dialog = new TextInputDialog(oldName);
+        dialog.setResizable(true);
+        dialog.setTitle("Change Object Name");
+        dialog.setHeaderText("Object Name");
+        dialog.showAndWait().ifPresent(canvas::setSelectedObjectsName);
     }
 }
